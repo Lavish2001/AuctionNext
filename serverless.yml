@@ -1,0 +1,12 @@
+service: et-tl
+provider:
+  name: aws
+  stage: live
+  region: us-east-1
+  runtime: nodejs14.x
+functions:
+  app:
+    handler: index.handler
+    events:
+      - http: ANY /
+      - http: "ANY {proxy+}"

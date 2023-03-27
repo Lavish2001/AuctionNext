@@ -1,0 +1,28 @@
+{
+  "name": "nodejs-serverless-boilerplate",
+  "description": "",
+  "version": "0.1.0",
+  "scripts": {
+    "start": "nodemon ./bin/www",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "bcrypt": "^5.0.0",
+    "cookie-parser": "^1.4.5",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "http": "0.0.1-security",
+    "joi": "^17.9.1",
+    "morgan": "^1.10.0",
+    "multer": "^1.4.2",
+    "mysql2": "^2.1.0",
+    "sequelize": "^5.22.4",
+    "serverless-http": "^2.3.2",
+    "socket.io": "^4.6.1",
+    "twig": "^1.15.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.14",
+    "sequelize-cli": "^6.2.0"
+  }
+}
