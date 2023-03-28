@@ -48,7 +48,7 @@ module.exports = class UserController {
       const { error, value } = loginSchema.validate(req.body);
       if (error) {
 
-        return res.status(400).json(error.message)
+        return res.status(400).json({ 'status': 'failed', 'message': error.message })
       } else {
         const exist = await User.findOne({ where: { email: value.email } });
         if (exist) {
@@ -149,7 +149,7 @@ module.exports = class UserController {
       const { error, value } = changePasswordSchema.validate(req.body);
       if (error) {
 
-        return res.status(400).json(error.message)
+        return res.status(400).json({ 'status': 'failed', 'message': error.message })
 
       } else {
         await compare(req, res, value.current_password, req.user.password);

@@ -5,6 +5,52 @@ const loginAuth = middleware("loginAuth");
 
 
 
+
+// USER EJS TEMPLATE ENGINE ROUTES //
+
+
+
+// LOGIN OR SIGNUP //
+
+router.get('/', async (req, res) => {
+  return res.render('start')
+});
+
+
+
+// USER LOGIN //
+
+router.get('/user_login', async (req, res) => {
+  return res.render('login')
+});
+
+
+
+// USER SIGNUP //
+
+router.get('/user_signup', async (req, res) => {
+  return res.render('signup')
+});
+
+
+
+
+// AFTER LOGIN WELCOME PAGE //
+
+router.get('/welcome', async (req, res) => {
+  return res.render('welcome')
+});
+
+
+
+
+/****************************************************************************************************************************************************************/
+
+
+// USER API ROUTES //
+
+
+
 // USER SIGNUP //
 
 router.post('/user-signup', (req, res) => {

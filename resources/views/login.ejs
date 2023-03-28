@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<style>
+    #form-data {
+        width: 400px;
+        display: flex;
+        flex-direction: column;
+        border: 1px solid black;
+        padding: 15px 15px 15px 15px;
+        border-radius: 5px;
+        margin-top: 100px;
+    }
+
+    body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .control {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .inpt {
+        height: 25px;
+        border-radius: 5px;
+    }
+
+    .btn_submit {
+        width: 50%;
+        height: 30px;
+        border-radius: 5px;
+        text-align: center;
+        font-size: 16px;
+    }
+
+    .cntr_btn {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+    }
+
+    .top-div {
+        display: flex;
+        width: 100%;
+        justify-content: start;
+    }
+
+    a {
+        font-size: 20px;
+        font-weight: 900;
+        text-decoration: none;
+        padding: 20px;
+        width: 180px;
+        height: 18px;
+    }
+</style>
+
+<body>
+
+    <div class="top-div">
+    </div>
+    <div>
+        <form id="form-data" onsubmit="loguser(event)">
+            <div class="cntr_btn">
+                <h2>LOGIN...</h2>
+            </div>
+            <label for="email">
+                <h2>E-mail :</h2>
+            </label> <input id="email" autocomplete="username" class="inpt" type="email" />
+            <label for="password">
+                <h2> Password :</h2>
+            </label> <input id="password" autocomplete="current-password" class="inpt" type="password" />
+            <br></br>
+            <div class="cntr_btn"> <button type="submit" class="btn_submit">SUBMIT</button> </div>
+        </form>
+    </div>
+</body>
+<script>
+
+    const loguser = (e) => {
+        e.preventDefault();
+        var email = document.getElementById('email').value;
+        var password = document.getElementById('password').value;
+        const res = fetch('/user-login', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                email: email,
+                password: password
+            })
+        }).then((res) => {
+            if (res.status === 200) {
+                return (res.json()).then((res) => {
+                    window.location.href = '/welcome'
+                })
+            } else {
+                return res.json().then((res) => {
+                    alert(res.message)
+                }).catch((err) => {
+                    alert(err)
+                })
+            }
+        })
+    }
+</script>
+
+</html>

@@ -6,16 +6,19 @@ let path = require("path");
 let logger = require("morgan");
 let cookieParser = require("cookie-parser");
 let userRoutes = require("./routes/UserApi");
+let itemRoutes = require("./routes/ItemApi");
 // Import the library:
 let cors = require("cors");
 const { sequelize } = require("./app/Models/index");
 let app = express();
+const dir = (__dirname + '/Public/Items');
+
 
 // sequelize.sync();
 
 // view engine setup
 app.set("views", path.join(__dirname, "resources/views"));
-app.set("view engine", "twig"); // either pug,twig etc
+app.set("view engine", "ejs"); // only EJS template engine.
 
 app.use(logger("dev"));
 app.use(express.json());
@@ -25,7 +28,15 @@ app.use(express.static(path.join(__dirname, "public")));
 // Then use it before your routes are set up:
 
 app.use(cors());
-app.use("/api/v1/", userRoutes);
+app.use("/", userRoutes);
+app.use("/", itemRoutes);
+
+
+// Images
+
+app.use('/Images', express.static(path.join(dir)));
+
+
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {

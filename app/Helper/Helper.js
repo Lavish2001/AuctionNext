@@ -1,5 +1,7 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const multer = require('multer');
+const { User } = model("");
 
 
 
@@ -62,11 +64,57 @@ const options = {
 
 
 
+// CHECK USER IS ADMIN OR NOT //
+
+const checkAdmin = async (user, req, res) => {
+    if (user.admin === true) {
+        return;
+        // code return to mainFunction
+    } else {
+        throw new Error('You are not admin')
+    };
+};
+
+
+
+
+// CONFIGURE STORE //
+
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'Public/Items');
+    },
+    filename: (req, file, cb) => {
+        cb(null, file.originalname.split('.')[0] + '-' + Date.now() + '.' + file.mimetype.split('/')[1])
+    }
+});
+
+
+
+// MIDDLEWARE UPLOAD FUNCTION //
+
+const upload = multer({
+    storage: storage,
+    limits: { fileSize: 1024 * 1024 * 100, fieldNameSize: 100 },
+    fileFilter: (req, file, cb) => {
+        if (file.mimetype == "image/png" || file.mimetype == "image/jpg" || file.mimetype == "image/jpeg") {
+            cb(null, true);
+        } else {
+            return cb(new Error('Only jpg, png and jpeg formats are allowed!'));
+        }
+    }
+}).single('image');
+
+
+
 
 module.exports = {
     HashPassword,
     passwordCheck,
     assignToken,
     compare,
+    upload,
+    checkAdmin,
+    storage,
     options
 };

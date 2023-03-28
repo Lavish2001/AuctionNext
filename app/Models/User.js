@@ -34,10 +34,14 @@ module.exports = (sequelize, DataTypes) => {
       unique: true,
       allowNull: false
     },
-
     password: {
       type: DataTypes.STRING,
       allowNull: false
+    },
+    admin: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false
     }
 
   }, {

@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .product {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .product_img {
+            width: 300px;
+            height: 400px;
+        }
+
+        .details {
+            font-size: 15px;
+        }
+
+        thead {
+            font-size: 20px;
+        }
+
+        th {
+            width: 300px;
+            height: 40px;
+            padding-bottom: 10px;
+            border: 1px solid black;
+            position: sticky;
+            top: 99px;
+            background-color: white;
+        }
+
+        td {
+            width: 300px;
+            font-size: 20px;
+            text-align: center;
+            border: 1px solid black;
+            height: 40px;
+        }
+
+        img {
+            height: 300px;
+            width: 300px;
+        }
+
+
+        table {
+            padding-top: 10px;
+        }
+
+        .top-div {
+            display: flex;
+            padding-left: 20px;
+            width: 100%;
+            justify-content: start;
+            position: fixed;
+            top: 20px;
+        }
+
+        a {
+            display: flex;
+            justify-content: center;
+            font-size: 22px;
+            font-family: 'Times New Roman', Times, serif;
+            font-weight: 900;
+            text-decoration: none;
+            width: 200px;
+            height: 16px;
+            padding-bottom: 20px;
+        }
+
+        span {
+            font-size: 30px;
+            border: 1px solid black;
+            border-radius: 5px;
+            color: white;
+            background-color: black;
+            margin-left: 10px;
+        }
+
+        span:hover {
+            cursor: pointer;
+        }
+
+        #clear:hover {
+            cursor: pointer;
+        }
+
+        h1 {
+            font-size: 40px;
+            font-family: 'Times New Roman', Times, serif;
+            /* color: white; */
+        }
+
+        #main {
+            font-size: 20px;
+        }
+
+        .pagination {
+            display: inline-block;
+            text-align: center;
+        }
+
+        h2 {
+            padding: 0.5rem 1rem;
+            margin-left: 0.5rem;
+            display: inline-block;
+            background-color: #f2f2f2;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #333;
+            box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.2);
+        }
+
+        h2:hover {
+            background-color: rgb(58, 48, 48);
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="top-div">
+        <a id="clear" style="color: darkblue;" onclick="add(event)"> Create Auction </a>
+        <a id="clear" style="color: darkblue;" href="/create_auction_item"> Add Auction Item </a>
+        <a id="clear" style="color: darkblue;" onclick="add3(event)"> Live Auction </a>
+        <a id="clear" style="color: darkblue;" onclick="clearData(event)"> Log Out </a>
+    </div>
+    <h1>
+        Welcome, This is a Live Auction Website.
+    </h1>
+    <div id="main">
+
+    </div>
+</body>
+
+<script>
+
+    const page = (event) => {
+        if (localStorage.getItem('pageNumber') == event) {
+            localStorage.setItem('pageNumber', event)
+        } else {
+            localStorage.setItem('pageNumber', event)
+            location.reload()
+        }
+
+    }
+    fetch(`/get-all-items?number=${Number(localStorage.getItem('pageNumber'))}`).then((res) => {
+        if (res.status === 200) {
+            return res.json().then((res) => {
+                if (res.data.length) {
+                    document.getElementById('main').innerHTML = `
+                    <table id="tablee">
+        <thead>
+            <tr>
+                <th>Item Name</th>
+                <th>Item Id</th>
+                <th>Description</th>
+                <th>Start Price</th>
+                <th>Item Image</th>
+            </tr>
+        </thead>
+        <tbody id="table_body">
+       ${res.data.map((item) => {
+                        return `
+        <tr style="font-size:40px; font-weight:900;" >
+                    <td>${item.item_name}</td>
+                    <td>${item.item_id} </td>
+                    <td>${item.description}</td>
+                    <td>${item.start_price} $</td>
+                    <td> <img src=http://localhost:9000/Images/${item.image}> </img> </td>
+                </tr>
+        `
+                    }).join('')}
+        </tbody>
+    </table>
+    ${res.page.map((item) => {
+                        return `
+                        <div class="pagination">
+                            ${item == localStorage.getItem('pageNumber') ? `<h2 style = "background-color: rgb(58, 48, 48); color: white;" onclick="page(${item})">${item}</h2>`
+                                : `<h2 onclick="page(${item})">${item}</h2>`
+                            }
+        </div>
+        `
+                    }).join('')}
+                    `
+                } else {
+                    document.getElementById('main').innerHTML = `
+                    <h2> No Items Found... </h2>
+                    `
+                }
+            })
+        } else {
+            return res.json().then((res) => {
+                alert(res.message)
+            }).catch((err) => {
+                alert(err)
+            })
+        }
+    })
+
+    const clearData = (e) => {
+        e.preventDefault();
+        const res = fetch('/user-logout', {
+            method: 'DELETE',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+        }).then((res) => {
+            if (res.status === 200) {
+                return (res.json()).then((res) => {
+                    window.location.href = '/'
+                })
+            } else {
+                return res.json().then((res) => {
+                    alert(res.message)
+                }).catch((err) => {
+                    alert(err)
+                })
+            }
+        })
+    }
+</script>
+
+</html>
