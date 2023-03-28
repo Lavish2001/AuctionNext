@@ -7,3 +7,7 @@ jspm_packages
 
 package-lock.json
 env.json
+
+# Remove Useless Folders
+
+Public
