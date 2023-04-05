@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="http://localhost:1111/socket.io/socket.io.js"></script>
     <title>Document</title>
 
 
@@ -160,9 +161,9 @@
 
 <body>
     <div class="top-div">
-        <a onclick="add(event)"> Create Auction </a>
+        <a href="/create_auction"> Create Auction </a>
         <a href="/create_auction_item"> Add Auction Item </a>
-        <a onclick="add3(event)"> Live Auction </a>
+        <a href="/live_auction"> Join Auction </a>
         <a onclick="clearData(event)"> Log Out </a>
     </div>
     <h1>
@@ -174,6 +175,13 @@
 </body>
 
 <script>
+
+    const socket = io('http://localhost:1111');
+    socket.on('join-auction', data => {
+        alert(data);
+        window.location.href = "/live_auction"
+    })
+
 
     const page = (event) => {
         if (localStorage.getItem('pageNumber') == event) {
@@ -195,7 +203,7 @@
                 <th>Item Name</th>
                 <th>Item Id</th>
                 <th>Description</th>
-                <th>Start Price</th>
+                <th>Base Price</th>
                 <th>Item Image</th>
             </tr>
         </thead>
@@ -206,7 +214,7 @@
                     <td>${item.item_name}</td>
                     <td>${item.item_id} </td>
                     <td>${item.description}</td>
-                    <td>${item.start_price} $</td>
+                    <td>${item.base_price} $</td>
                     <td> <img src=http://localhost:9000/Images/${item.image}> </img> </td>
                 </tr>
         `
@@ -249,6 +257,7 @@
         }).then((res) => {
             if (res.status === 200) {
                 return (res.json()).then((res) => {
+                    localStorage.clear();
                     window.location.href = '/'
                 })
             } else {

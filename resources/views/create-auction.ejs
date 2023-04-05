@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="http://localhost:1111/socket.io/socket.io.js"></script>
     <title>Document</title>
 </head>
 
@@ -95,24 +96,27 @@
         color: white;
         transition: 0.4s;
     }
+
+    #item_id {
+        height: 2.4rem;
+        font-size: 1.2rem;
+        outline: none;
+    }
 </style>
 
 <body>
 
     <div class="top-div">
-        <a href="/">Back</a>
+        <a href="/welcome">Back</a>
     </div>
     <div>
-        <form id="form-data" onsubmit="loguser(event)">
+        <form id="form-data" onsubmit="createAuction(event)">
             <div class="cntr_btn">
-                <h2>LOGIN...</h2>
+                <h2>Create Auction ...</h2>
             </div>
-            <label for="email">
-                <h2>E-mail :</h2>
-            </label> <input id="email" autocomplete="username" class="inpt" type="email" />
-            <label for="password">
-                <h2> Password :</h2>
-            </label> <input id="password" autocomplete="current-password" class="inpt" type="password" />
+            <label for="item_id">
+                <h2> Select Item :</h2>
+            </label> <select id="item_id" class="inpt"> </select>
             <br></br>
             <div class="cntr_btn"> <button type="submit" class="btn_submit">SUBMIT</button> </div>
         </form>
@@ -120,34 +124,57 @@
 </body>
 <script>
 
-    const loguser = (e) => {
+    const socket = io('http://localhost:1111');
+    socket.on('join-auction', data => {
+        alert(data);
+        window.location.href = "/live_auction"
+    })
+
+    const createAuction = (e) => {
         e.preventDefault();
-        var email = document.getElementById('email').value;
-        var password = document.getElementById('password').value;
-        const res = fetch('/user-login', {
+        let item_id = document.getElementById('item_id').value;
+        fetch('create-auction', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                email: email,
-                password: password
+                item_id: item_id
             })
         }).then((res) => {
             if (res.status === 200) {
-                return (res.json()).then((res) => {
-                    window.location.href = '/welcome'
+                return res.json().then((res) => {
+                    socket.emit('auction-started', res.message);
                 })
             } else {
                 return res.json().then((res) => {
                     alert(res.message)
+                    window.location.href = "/welcome"
                 }).catch((err) => {
-                    alert(err)
+                    alert(err.message)
+                    window.location.href = "/welcome"
                 })
             }
         })
     }
+
+    fetch('/get-all-items-once').then((res) => {
+        if (res.status === 200) {
+            res.json().then((res) => {
+                document.getElementById('item_id').innerHTML = res.data.map((item) => {
+                    return ` <option> ${item.item_id} </option> `
+                })
+            })
+        } else {
+            return res.json().then((res) => {
+                alert(res.message)
+            }).catch((err) => {
+                alert(err.message)
+            })
+        }
+    })
+
 </script>
 
 </html>

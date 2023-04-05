@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="http://localhost:1111/socket.io/socket.io.js"></script>
+    <title>Document</title>
+
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .double {
+            display: flex;
+            width: 100%;
+            justify-content: space-evenly;
+        }
+
+        .top-div {
+            display: flex;
+            padding-left: 20px;
+            flex-direction: column;
+            width: 100%;
+            justify-content: start;
+            position: fixed;
+            top: 20px;
+            z-index: -99;
+        }
+
+        a {
+            display: flex;
+            justify-content: center;
+            font-size: 22px;
+            font-family: 'Times New Roman', Times, serif;
+            font-weight: 900;
+            text-decoration: none;
+            width: 200px;
+            height: 16px;
+            padding-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 40px;
+            font-family: 'Times New Roman', Times, serif;
+        }
+
+        a {
+            padding: 0.5rem 1rem;
+            margin-top: 0.5rem;
+            display: flex;
+            width: 10rem;
+            justify-content: center;
+            align-items: center;
+            background-color: #f2f2f2;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #333;
+            box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.2);
+        }
+
+        a:hover {
+            background-color: rgb(58, 48, 48);
+            color: white;
+            transition: 0.4s;
+        }
+
+        .join {
+            padding: 0.5rem 1rem;
+            margin-top: 0.5rem;
+            display: flex;
+            width: 10rem;
+            justify-content: center;
+            align-items: center;
+            background-color: rgb(58, 48, 48);
+            color: white;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            font-weight: bold;
+            box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.2);
+        }
+
+        .join:hover {
+            background-color: #f2f2f2;
+            color: rgb(58, 48, 48);
+            transition: 0.4s;
+        }
+
+        .bid {
+            padding: 0.5rem 1rem;
+            margin-top: 0.5rem;
+            display: flex;
+            margin-left: 1rem;
+            width: 10rem;
+            justify-content: center;
+            align-items: center;
+            background-color: #333;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            cursor: pointer;
+            color: white;
+            font-size: 1.2rem;
+            font-weight: bold;
+            box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.2);
+        }
+
+        .bid:hover {
+            background-color: #f2f2f2;
+            color: black;
+            transition: 0.4s;
+        }
+
+
+        .bidbtn {
+            padding: 0.5rem 1rem;
+            margin-top: 0.5rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 2rem;
+            width: 10rem;
+            background-color: #333;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+            color: white;
+            box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.2);
+        }
+
+        .bidbtn:hover {
+            background-color: #f2f2f2;
+            color: black;
+            transition: 0.4s;
+            border: 1px solid black;
+        }
+
+        .span {
+            padding: 0.5rem 1rem;
+            margin-top: 0.5rem;
+            margin-left: 1rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 1.5rem;
+            width: 8rem;
+            background-color: #333;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: white;
+            box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.2);
+        }
+
+        .span:hover {
+            background-color: #f2f2f2;
+            color: black;
+            transition: 0.4s;
+            border: 1px solid black;
+        }
+
+        .span2 {
+            padding: 0.5rem 1rem;
+            margin-top: 0.5rem;
+            margin-right: 1rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 1.5rem;
+            width: 8rem;
+            background-color: #333;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: white;
+            box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.2);
+        }
+
+        .span2:hover {
+            background-color: #f2f2f2;
+            color: black;
+            transition: 0.4s;
+            border: 1px solid black;
+        }
+
+
+        span {
+            padding: 0.5rem 1rem;
+            margin-left: 0.5rem;
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: rgb(37, 36, 36);
+            box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.2);
+            width: 100%;
+        }
+
+        span:hover {
+            background-color: rgb(58, 48, 48);
+            color: white;
+            transition: 0.4s;
+        }
+
+        img {
+            height: 300px;
+            width: 500px;
+            border-radius: 5px;
+        }
+
+        .innermain {
+            display: flex;
+            flex-direction: column;
+            margin-top: 1rem;
+            background-color: #f2f2f2;
+            box-shadow: 5px 10px 26px rgba(0, 0, 0, 0.2);
+            border-radius: 5px;
+        }
+
+        .items {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem 0 2rem 0;
+            width: 100%;
+        }
+
+        h2 {
+            height: 0.8rem;
+            font-size: 23px;
+            font-family: 'Times New Roman', Times, serif;
+        }
+
+        #main {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .user {
+            display: flex;
+            width: 40rem;
+            flex-direction: column;
+            margin-left: 5rem;
+            border-radius: 5px;
+            padding: 10px;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .makebid {
+            display: flex;
+            margin-top: 5rem;
+            flex-direction: column;
+            box-shadow: 5px 10px 26px rgba(29, 27, 27, 0.2);
+            width: 30rem;
+            height: 6rem;
+            background-color: #f2f2f2;
+            border-radius: 5px;
+            padding: 1rem;
+        }
+
+        .makebid2 {
+            display: flex;
+            margin-top: 5rem;
+            flex-direction: column;
+            box-shadow: 5px 10px 26px rgba(29, 27, 27, 0.2);
+            width: 35rem;
+            height: 4rem;
+            background-color: #f2f2f2;
+            border-radius: 5px;
+            padding: 1rem;
+        }
+
+
+        .makebid5 {
+            display: flex;
+            margin-top: 5rem;
+            flex-direction: column;
+            box-shadow: 5px 10px 26px rgba(29, 27, 27, 0.2);
+            width: 35rem;
+            height: 4rem;
+            background-color: #f2f2f2;
+            border-radius: 5px;
+            padding: 1rem;
+        }
+
+        h3 {
+            height: 0.8rem;
+            font-size: 23px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Times New Roman', Times, serif;
+        }
+
+        .list {
+            height: 0.8rem;
+            font-size: 23px;
+            display: flex;
+            justify-content: start;
+            align-items: center;
+            font-family: 'Times New Roman', Times, serif;
+        }
+
+
+        .make {
+            display: flex;
+            flex-direction: column;
+            padding: 1rem;
+            height: 100%;
+            width: 18%;
+            justify-content: center;
+            align-items: center;
+            background-color: #f2f2f2;
+            box-shadow: 5px 10px 26px rgba(29, 27, 27, 0.2);
+        }
+
+        input {
+            width: 20rem;
+            height: 1.6rem;
+            margin-left: 10px;
+            border-radius: 5px;
+            outline: none;
+            font-size: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <a href="/welcome"> Home </a>
+    <div class="top-div">
+
+    </div>
+    <h1>
+        Welcome, Please Join Auction.
+    </h1>
+    <div class="double">
+        <div id="main">
+
+        </div>
+    </div>
+
+</body>
+
+<script>
+
+
+    const socket = io('http://localhost:1111');
+
+    let bidding;
+
+
+    let bidId;
+    fetch('/get-auction-item').then((res) => {
+        if (res.status === 200) {
+            return res.json().then((res) => {
+                if (res.data.Bidding.length) {
+                    var filterData = res.data.Bidding.reduce((pre, curr) => {
+                        return (pre.bid_amount > curr.bid_amount) ? pre : curr
+                    });
+                };
+                bidId = res.data.id;
+                document.getElementById('main').innerHTML = `
+               <div class="innermain"> 
+                <img src=http://localhost:9000/Images/${res.data.Item.image}> </img>
+                <div class="items">
+                    <h2> Item Name : <span> ${res.data.Item.item_name} </span> </h2>
+                    <h2> Description : <span> ${res.data.Item.description} </span> </h2>
+                    <h2> Closed At : <span> ${new Date(res.data.ended_at).toLocaleTimeString([], { hour12: true, hour: 'numeric', minute: 'numeric' })}</span> </h2>
+                    <h2> <a class="join" href = "/live_auction"> Join </a> </h2>
+                    </div>
+                </div>
+                `
+            })
+        } else {
+            return res.json().then((res) => {
+                alert(res.message);
+                window.location.href = "/welcome"
+            }).catch((err) => {
+                alert(err.message);
+                window.location.href = "/welcome"
+            })
+        }
+    });
+
+</script>
+
+</html>
+<!-- <h2> ${res.data.bid_amount ? `Highest Bidding : <span> ${res.data.bid_amount} </span> ` : ` Highest Bidding :<span> ! No one bid </span>`} </h2> -->
+
+<!-- <h3> Highest Bid : ${res.data.bidder_id ? res.data.bidder_id : 'No One Bid'} <span class="span">
+    ${res.data.Bidding.length ? `Price :  ${res.data.Bidding.reduce((a, b) => {
+return b.bid_amount > a ? b.bid_amount : a;
+}, 0)} $` : `0 $`}</span> </h3> -->

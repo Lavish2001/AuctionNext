@@ -1,0 +1,15 @@
+{
+  "name": "socket",
+  "version": "1.0.0",
+  "description": "This is a socket server for live auction",
+  "main": "socket.js",
+  "scripts": {
+    "start": "nodemon index.js"
+  },
+  "author": "Lavish",
+  "license": "ISC",
+  "dependencies": {
+    "nodemon": "^2.0.22",
+    "socket.io": "^4.6.1"
+  }
+}

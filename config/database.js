@@ -6,6 +6,7 @@ module.exports = {
     password: env("MYSQL_PASSWORD", ""),
     port: env("MYSQL_PORT", "3306"),
     dialect: 'mysql',
+    timezone: '+05:30', // for writing to database
     dialectOptions: {
       bigNumberStrings: true
     }
@@ -17,6 +18,7 @@ module.exports = {
     host: '127.0.0.1',
     port: 3306,
     dialect: 'mysql',
+    timezone: '+05:30', // for writing to database
     dialectOptions: {
       bigNumberStrings: true
     }
@@ -28,6 +30,7 @@ module.exports = {
     password: env("MYSQL_PASSWORD", ""),
     port: env("MYSQL_PORT", "3306"),
     dialect: 'mysql',
+    timezone: '+05:30', // for writing to database
     dialectOptions: {
       bigNumberStrings: true
     }

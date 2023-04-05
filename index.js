@@ -7,6 +7,7 @@ let logger = require("morgan");
 let cookieParser = require("cookie-parser");
 let userRoutes = require("./routes/UserApi");
 let itemRoutes = require("./routes/ItemApi");
+let auctionRoutes = require("./routes/AuctionApi");
 // Import the library:
 let cors = require("cors");
 const { sequelize } = require("./app/Models/index");
@@ -30,6 +31,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(cors());
 app.use("/", userRoutes);
 app.use("/", itemRoutes);
+app.use("/", auctionRoutes);
 
 
 // Images
@@ -60,3 +62,26 @@ app.use((err, req, res, next) => {
 
 module.exports = app;
 module.exports.handler = serverless(app);
+
+// console.log(new Date(Date.now() + 1800000).toLocaleTimeString([], { hour12: true, hour: 'numeric', minute: 'numeric' }))
+
+
+// const transactions = [
+//   { id: 1, amount: 100 },
+//   { id: 2, amount: 50 },
+//   { id: 3, amount: 200 },
+//   { id: 4, amount: 75 },
+// ];
+
+// const maxAmount = transactions.reduce((max, transaction) => {
+//   return transaction.amount > max ? transaction.amount : max;
+// }, 0);
+
+// console.log(maxAmount); // Output: 200
+
+// var arr = [{ name: 'lavish', salary: 2000 }, { name: 'david', salary: 10000 }, { name: 'john', salary: 5000 }];
+
+// arr.sort((a, b) => {
+//   return a.salary > b.salary ? -1 : 1
+// });
+// console.log(arr)

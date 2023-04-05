@@ -18,9 +18,8 @@ router.get('/create_auction_item', async (req, res) => {
 
 
 
-
-
 /****************************************************************************************************************************************************************/
+
 
 
 // ITEM API ROUTES //
@@ -35,10 +34,19 @@ router.post('/create-item', loginAuth, (req, res) => {
 
 
 
-// GET ALL AUCTION ITEM //
+// GET ALL AUCTION ITEM WITH PAGINATION //
 
 router.get('/get-all-items', loginAuth, (req, res) => {
     return icontroller.getAllItem(req, res);
+});
+
+
+
+
+// GET ALL AUCTION ITEM //
+
+router.get('/get-all-items-once', loginAuth, (req, res) => {
+    return icontroller.getAllItemOnce(req, res);
 });
 
 

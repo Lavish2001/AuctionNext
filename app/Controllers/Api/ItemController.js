@@ -1,8 +1,6 @@
-const { User } = model("");
 const { Item } = model("");
-const { signupSchema, loginSchema, changePasswordSchema } = validator("UserValidator");
-const { HashPassword, passwordCheck, assignToken, checkAdmin, upload } = helper("Helper");
-const { Op } = require("sequelize");
+const { checkAdmin, upload } = helper("Helper");
+
 
 module.exports = class ItemController {
 
@@ -31,7 +29,7 @@ module.exports = class ItemController {
                                     item_id: item_id,
                                     description: description,
                                     user_id: req.user.id,
-                                    start_price: start_price,
+                                    base_price: start_price,
                                     image: req.file.filename
                                 });
                                 return res.status(200).redirect('/welcome');
@@ -53,7 +51,7 @@ module.exports = class ItemController {
 
 
 
-    // GET ALL ITEMS //
+    // GET ALL ITEMS WITH PAGINATION //
 
     async getAllItem(req, res) {
         try {
@@ -64,14 +62,15 @@ module.exports = class ItemController {
                 page = Number(req.query.number)
             }
             let items = await Item.findAll();
+            let sorted = items.sort((a, b) => { return a.createdAt > b.createdAt ? -1 : 1 })
             let num = 2;
-            const data = items.slice((page - 1) * num, page * num);
+            const data = sorted.slice((page - 1) * num, page * num);
             let arr = [];
             let divide;
-            if ((items.length) % num == 0) {
-                divide = (items.length) / num
+            if ((sorted.length) % num == 0) {
+                divide = (sorted.length) / num
             } else {
-                divide = ((items.length) / num) + 1
+                divide = ((sorted.length) / num) + 1
             }
             for (let i = 1; i <= divide; i++) {
                 arr.push(i)
@@ -84,6 +83,18 @@ module.exports = class ItemController {
 
 
 
+
+
+    // GET ALL ITEMS //
+
+    async getAllItemOnce(req, res) {
+        try {
+            let items = await Item.findAll({ attributes: ['item_id'] });
+            return res.status(200).json({ 'status': 'success', 'data': items })
+        } catch (err) {
+            return res.status(500).json({ 'status': 'failed', 'message': err.message })
+        }
+    }
 
 
 };

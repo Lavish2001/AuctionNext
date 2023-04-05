@@ -1,9 +1,12 @@
 'use strict';
 
+const { date } = require('joi');
 const { Model } = require('sequelize');
+const { Op } = require('sequelize');
+
 module.exports = (sequelize, DataTypes) => {
 
-    class Item extends Model {
+    class Bid extends Model {
         /**
          * Helper method for defining associations.
          * This method is not a part of Sequelize lifecycle.
@@ -11,9 +14,13 @@ module.exports = (sequelize, DataTypes) => {
          */
         static associate(models) {
             // define association here
+            this.myAssociation = models.Bid.belongsTo(models.User, {
+                foreignKey: "bidder_id",
+                as: 'Bidder'
+            });
         }
     };
-    Item.init({
+    Bid.init({
 
         id: {
             type: DataTypes.BIGINT,
@@ -22,40 +29,25 @@ module.exports = (sequelize, DataTypes) => {
             primaryKey: true
         },
 
-        user_id: {
+        auction_id: {
             type: DataTypes.BIGINT,
             allowNull: false
         },
-        description: {
-            type: DataTypes.STRING,
-            allowNull: false
+        bidder_id: {
+            type: DataTypes.BIGINT
         },
-        item_name: {
-            type: DataTypes.STRING,
-            allowNull: false
-        },
-        base_price: {
+        bid_amount: {
             type: DataTypes.BIGINT,
-            allowNull: false,
-            defaultValue: 0
-        },
-        image: {
-            type: DataTypes.STRING,
-            allowNull: false
-        },
-        item_id: {
-            type: DataTypes.STRING,
             allowNull: false
         }
-
     }, {
         sequelize,
-        tableName: 'Item',
+        tableName: 'Bid',
         timestamps: true,
         timestamps: { createdAt: "created_at", updatedAt: "updated_at" },
         underscored: true
     });
 
-    return Item;
+    return Bid;
 
 };
