@@ -5,7 +5,6 @@ const loginAuth = middleware("loginAuth");
 
 
 
-
 // AUCTION EJS TEMPLATE ENGINE ROUTES //
 
 
@@ -26,7 +25,6 @@ router.get('/join_auction', async (req, res) => {
 
 
 
-
 // LIVE AUCTION //
 
 router.get('/live_auction', async (req, res) => {
@@ -37,7 +35,6 @@ router.get('/live_auction', async (req, res) => {
 
 
 /****************************************************************************************************************************************************************/
-
 
 
 
