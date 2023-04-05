@@ -22,4 +22,15 @@ io.on('connection', socket => {
         io.emit('send-bid', res)
     })
 
+
+    socket.on('user-join-auction', res => {
+        users[socket.id] = res;
+        socket.broadcast.emit('send-detail', res)
+    })
+
+    socket.on('user-leave-auction', res => {
+        users[socket.id] = res;
+        socket.broadcast.emit('leave-detail', res)
+    })
+
 });

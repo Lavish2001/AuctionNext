@@ -171,5 +171,21 @@ module.exports = class UserController {
 
 
 
+  // SINGLE USER DETAILS //
+
+  async details(req, res) {
+
+    try {
+      const detail = await User.findOne({ where: { id: req.user.id }, attributes: { exclude: ['createdAt', 'updatedAt', 'email', 'password'] } });
+      return res.status(200).json({ 'status': 'success', 'data': detail })
+    } catch (err) {
+      return res.status(500).json({ 'status': 'failed', 'message': err.message })
+    }
+  };
+
+
+
+
+
 
 };

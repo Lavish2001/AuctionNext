@@ -107,4 +107,13 @@ router.delete('/logout-other-devices', loginAuth, (req, res) => {
 
 
 
+// SINGLE USER DETAILS //
+
+router.get('/details', loginAuth, (req, res) => {
+  return ucontroller.details(req, res);
+});
+
+
+
+
 module.exports = router;

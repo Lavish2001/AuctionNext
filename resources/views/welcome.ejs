@@ -163,7 +163,7 @@
     <div class="top-div">
         <a href="/create_auction"> Create Auction </a>
         <a href="/create_auction_item"> Add Auction Item </a>
-        <a href="/live_auction"> Join Auction </a>
+        <a onclick="join(event)"> Join Auction </a>
         <a onclick="clearData(event)"> Log Out </a>
     </div>
     <h1>
@@ -177,6 +177,17 @@
 <script>
 
     const socket = io('http://localhost:1111');
+    const join = (e) => {
+        e.preventDefault();
+        fetch('/details').then((res) => {
+            if (res.status === 200) {
+                return res.json().then((res) => {
+                    socket.emit("user-join-auction", res.data.username);
+                    window.location.href = "/live_auction"
+                })
+            }
+        })
+    }
     socket.on('join-auction', data => {
         alert(data);
         window.location.href = "/live_auction"

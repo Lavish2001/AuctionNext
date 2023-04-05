@@ -322,7 +322,7 @@
 </head>
 
 <body>
-    <a href="/welcome"> Home </a>
+    <a onclick="leave(event)"> Leave </a>
     <div class="top-div">
 
     </div>
@@ -342,10 +342,29 @@
 
 <script>
 
-
     const socket = io('http://localhost:1111');
 
+    const leave = (e) => {
+        e.preventDefault();
+        fetch('/details').then((res) => {
+            if (res.status === 200) {
+                return res.json().then((res) => {
+                    socket.emit("user-leave-auction", res.data.username);
+                    window.location.href = "/welcome"
+                })
+            }
+        })
+    }
+
     let bidding;
+
+    socket.on('send-detail', data => {
+        alert(`${data} Joined the Auction`)
+    });
+
+    socket.on('leave-detail', data => {
+        alert(`${data} Leave the Auction`)
+    })
 
     socket.on('send-bid', data => {
         bidding = data;
