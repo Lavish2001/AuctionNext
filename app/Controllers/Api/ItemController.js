@@ -93,7 +93,9 @@ module.exports = class ItemController {
 
     async getAllItemOnce(req, res) {
         try {
-            let items = await Item.findAll({ attributes: ['item_id'] });
+            let auction_items = await Auction.findAll({ where: { bidder_id: { [Op.ne]: null } }, attributes: { include: ['item_id'] } });
+            let itemId = auction_items.map((item) => { return item.item_id });
+            let items = await Item.findAll({ where: { id: { [Op.notIn]: itemId } } });
             return res.status(200).json({ 'status': 'success', 'data': items })
         } catch (err) {
             return res.status(500).json({ 'status': 'failed', 'message': err.message })

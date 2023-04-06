@@ -418,7 +418,7 @@
                     date = Date.now();
                     let minutes = Math.floor((new Date(res.data.ended_at).getTime() - date) / 60000);
                     let seconds = Math.floor(((new Date(res.data.ended_at).getTime() - date) % 60000) / 1000);
-                    if (minutes == 0) {
+                    if ((new Date(res.data.ended_at).getTime() - date) <= 0) {
                         alert('Auction Closed')
                         window.location.href = "/welcome"
                     }
