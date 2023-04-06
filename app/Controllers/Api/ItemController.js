@@ -1,4 +1,6 @@
+const { Op } = require("sequelize");
 const { Item } = model("");
+const { Auction } = model("");
 const { checkAdmin, upload } = helper("Helper");
 
 
@@ -61,7 +63,9 @@ module.exports = class ItemController {
             } else {
                 page = Number(req.query.number)
             }
-            let items = await Item.findAll();
+            let auction_items = await Auction.findAll({ where: { bidder_id: { [Op.ne]: null } }, attributes: { include: ['item_id'] } });
+            let itemId = auction_items.map((item) => { return item.item_id });
+            let items = await Item.findAll({ where: { id: { [Op.notIn]: itemId } } });
             let sorted = items.sort((a, b) => { return a.createdAt > b.createdAt ? -1 : 1 })
             let num = 2;
             const data = sorted.slice((page - 1) * num, page * num);
