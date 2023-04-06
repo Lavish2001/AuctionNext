@@ -1,8 +1,6 @@
 'use strict';
 
-const { date } = require('joi');
 const { Model } = require('sequelize');
-const { Op } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
 

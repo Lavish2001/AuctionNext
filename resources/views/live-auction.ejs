@@ -413,6 +413,18 @@
                     `
                 }).join('')}` : ` <h3 class="list"> <a class="bid"> ! No Bids </a> </h3>`}
                 `
+                var date = Date.now();
+                setInterval(() => {
+                    date = Date.now();
+                    let minutes = Math.floor((new Date(res.data.ended_at).getTime() - date) / 60000);
+                    let seconds = Math.floor(((new Date(res.data.ended_at).getTime() - date) % 60000) / 1000);
+                    if (minutes <= 0) {
+                        window.location.href = "/welcome"
+                    }
+                    document.getElementById("minutes").innerHTML = `
+                    Minutes Left :  ${minutes < 5 ? `<span style="color: red;"> ${minutes} : ${seconds < 10 ? `0${seconds}` : seconds} </span>` : `<span> ${minutes} : ${seconds < 10 ? `0${seconds}` : seconds} </span>`}
+                    `
+                }, 1000)
                 document.getElementById('main').innerHTML = `
                <div class="innermain"> 
                 <img src=http://localhost:9000/Images/${res.data.Item.image}> </img>
@@ -421,7 +433,7 @@
                     <h2> Description : <span> ${res.data.Item.description} </span> </h2>
                     <h2> Base Price : <span> ${res.data.Item.base_price} $ </span> </h2>
                     <h2 id="special"> ${res.data.Bidding.length ? `Highest Bid : <span> ${filterData.bid_amount} $</span> ` : ` Highest Bid :<span> ! No one bid </span>`} </h2>
-                    <h2> Closed At : <span> ${new Date(res.data.ended_at).toLocaleTimeString([], { hour12: true, hour: 'numeric', minute: 'numeric' })}</span> </h2>
+                    <h2 id="minutes">  </h2>
                     </div>
                 </div>
 

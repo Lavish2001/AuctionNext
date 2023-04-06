@@ -43,6 +43,14 @@ router.get('/welcome', async (req, res) => {
 
 
 
+// CHANGE PASSWORD //
+
+router.get('/change_password', async (req, res) => {
+  return res.render('change-password')
+});
+
+
+
 
 /****************************************************************************************************************************************************************/
 

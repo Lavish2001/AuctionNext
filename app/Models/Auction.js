@@ -22,36 +22,6 @@ module.exports = (sequelize, DataTypes) => {
                 foreignKey: "auction_id",
                 as: 'Bidding'
             });
-
-            // this.myAssociation = models.Courses.belongsTo(models.Users, {
-            //     foreignKey: "teacher_id",
-            //     as: 'Created_By'
-            // });
-
-            // this.myAssociation = models.Courses.hasMany(models.Grades, {
-            //     foreignKey: "course_id",
-            //     as: 'Grade'
-            // });
-
-            // this.myAssociation = models.Courses.hasMany(models.Enrollments, {
-            //     foreignKey: "course_id",
-            //     as: 'Course'
-            // });
-
-            // // Define the association between Courses and Users through Grades
-            // this.myAssociation = models.Courses.belongsToMany(models.Users, {
-            //     through: models.Grades,
-            //     foreignKey: 'course_id',
-            //     otherKey: 'student_id',
-            //     as: 'Students'
-            // });
-
-            // this.myAssociation = models.Courses.belongsToMany(models.Users, {
-            //     through: models.Enrollments,
-            //     foreignKey: 'course_id',
-            //     otherKey: 'student_id',
-            //     as: 'EnrolledStudents'
-            // });
         }
     };
     Auction.init({
