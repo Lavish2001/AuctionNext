@@ -59,7 +59,7 @@ module.exports = class UserController {
             user_id: exist.id,
             token: token
           });
-          return res.status(200).cookie('Token', token, options).json({ 'status': 'success', 'message': 'user login successfully' });
+          return res.status(200).cookie('Token', token, options).json({ 'status': 'success', 'message': 'user login successfully', 'data': exist });
 
         } else {
           return res.status(400).json({ 'status': 'failed', 'message': 'invalid email' })

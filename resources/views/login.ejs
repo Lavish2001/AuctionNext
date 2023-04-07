@@ -137,6 +137,8 @@
         }).then((res) => {
             if (res.status === 200) {
                 return (res.json()).then((res) => {
+                    let data = JSON.stringify(res.data);
+                    localStorage.setItem("user", data);
                     window.location.href = '/welcome'
                 })
             } else {

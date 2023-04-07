@@ -22,6 +22,11 @@ module.exports = (sequelize, DataTypes) => {
                 foreignKey: "auction_id",
                 as: 'Bidding'
             });
+
+            this.myAssociation = models.Auction.hasMany(models.Chat, {
+                foreignKey: "auction_id",
+                as: 'Chat'
+            });
         }
     };
     Auction.init({

@@ -33,6 +33,14 @@ router.get('/live_auction', async (req, res) => {
 
 
 
+// AUCTION RESULTS //
+
+router.get('/results', async (req, res) => {
+    return res.render('results')
+});
+
+
+
 
 /****************************************************************************************************************************************************************/
 
@@ -51,7 +59,7 @@ router.post('/create-auction', loginAuth, (req, res) => {
 
 
 
-// GET AUCTION ITEM WHICH IS AVAILABLE //
+// GET LIVE AUCTION ITEM WHICH IS AVAILABLE //
 
 router.get('/get-auction-item', loginAuth, (req, res) => {
     return acontroller.getAuctionItem(req, res);
@@ -63,6 +71,32 @@ router.get('/get-auction-item', loginAuth, (req, res) => {
 
 router.patch('/update-auction-item', loginAuth, (req, res) => {
     return acontroller.updateAuctionItem(req, res);
+});
+
+
+
+// GET SINGLE AUCTION ITEM //
+
+router.get('/get-single-auction-item', loginAuth, (req, res) => {
+    return acontroller.getAuctionItemSingle(req, res);
+});
+
+
+
+
+// SEND MESSAGE  //
+
+router.post('/send-message', loginAuth, (req, res) => {
+    return acontroller.sendMessage(req, res);
+});
+
+
+
+
+// CREATE AUCTION RESULT PDF  //
+
+router.post('/create-pdf', loginAuth, (req, res) => {
+    return acontroller.result(req, res);
 });
 
 

@@ -15,10 +15,22 @@
             align-items: center;
         }
 
+        #message {
+            transition: all 2s ease-in-out;
+        }
+
         .double {
             display: flex;
             width: 100%;
             justify-content: space-evenly;
+        }
+
+        .double2 {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            justify-content: center;
+            align-items: center;
         }
 
         .top-div {
@@ -95,6 +107,39 @@
             color: black;
             transition: 0.4s;
         }
+
+        .msg {
+            display: flex;
+            margin-left: 1rem;
+            width: 10rem;
+            height: auto;
+            justify-content: center;
+            align-items: center;
+            background-color: #333;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            cursor: pointer;
+            color: white;
+            font-size: 1.2rem;
+            font-weight: bold;
+            box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.2);
+        }
+
+        .list2 {
+            font-size: 23px;
+            display: flex;
+            height: auto;
+            justify-content: start;
+            align-items: center;
+            font-family: 'Times New Roman', Times, serif;
+        }
+
+
+        /* .msg:hover {
+            background-color: #f2f2f2;
+            color: black;
+            transition: 0.4s;
+        } */
 
 
         .bidbtn {
@@ -297,17 +342,68 @@
             font-family: 'Times New Roman', Times, serif;
         }
 
-
         .make {
             display: flex;
-            flex-direction: column;
             padding: 1rem;
-            height: 100%;
-            width: 18%;
-            justify-content: center;
+            margin-top: 5rem;
+            flex-direction: column;
+            height: 24rem;
+            width: 50%;
             align-items: center;
             background-color: #f2f2f2;
             box-shadow: 5px 10px 26px rgba(29, 27, 27, 0.2);
+            overflow-y: scroll;
+        }
+
+        .make::-webkit-scrollbar {
+            width: 5px;
+            height: 5px;
+        }
+
+        .make::-webkit-scrollbar-thumb {
+            background-color: #ccc;
+            border-radius: 5px;
+        }
+
+        .make::-webkit-scrollbar-thumb:hover {
+            background-color: #aaa;
+        }
+
+        .make::-webkit-scrollbar-track {
+            background-color: #f2f2f2;
+            border-radius: 5px;
+        }
+
+        .message {
+            display: flex;
+            padding: 1rem;
+            margin-top: 5rem;
+            flex-direction: column;
+            height: 40rem;
+            width: 50%;
+            align-items: center;
+            background-color: #f2f2f2;
+            box-shadow: 5px 10px 26px rgba(29, 27, 27, 0.2);
+            overflow-y: scroll;
+        }
+
+        .message::-webkit-scrollbar {
+            width: 5px;
+            height: 5px;
+        }
+
+        .message::-webkit-scrollbar-thumb {
+            background-color: #ccc;
+            border-radius: 5px;
+        }
+
+        .message::-webkit-scrollbar-thumb:hover {
+            background-color: #aaa;
+        }
+
+        .message::-webkit-scrollbar-track {
+            background-color: #f2f2f2;
+            border-radius: 5px;
         }
 
         input {
@@ -336,6 +432,19 @@
         <div id="make" class="make">
 
         </div>
+
+        <div class="double2">
+            <div class="makebid">
+                <h3> message : <input id="chat" type="text"> </input> </h3>
+                <div style="display:flex; justify-content:center;"> <button onclick="send(event)" class="bidbtn"> OK
+                    </button> </div>
+            </div>
+            <div id="message" class="message">
+
+            </div>
+        </div>
+
+
     </div>
 
 </body>
@@ -354,12 +463,18 @@
                 })
             }
         })
-    }
+    };
 
     let bidding;
 
     socket.on('send-detail', data => {
         alert(`${data} Joined the Auction`)
+    });
+
+    socket.on('auction-results', data => {
+        localStorage.setItem('auction', data);
+        alert(`auction Closed Click to see Auction Results`);
+        return window.location.href = "/results"
     });
 
     socket.on('leave-detail', data => {
@@ -368,6 +483,18 @@
 
     socket.on('send-bid', data => {
         bidding = data;
+
+        document.getElementById("message").innerHTML = `
+                ${bidding.Chat.length ? `${bidding.Chat.sort((a, b) => { return a.createdAt > b.createdAt ? 1 : -1 }).map((item) => {
+            return `
+                    <h3 class="list2"> ${item.sender.username} : <a class="msg"> ${item.text} </a> </h3>
+                    `
+        }).join('')}` : ` <h3 class="list"> <a class="bid"> ! No Messages </a> </h3>`}
+                `;
+
+        const scrollingElement = (document.getElementById("message"));
+        scrollingElement.scrollTop = scrollingElement.scrollHeight;
+
         var filterData = bidding.Bidding.reduce((pre, curr) => {
             return (pre.bid_amount > curr.bid_amount) ? pre : curr
         });
@@ -381,17 +508,20 @@
             document.getElementById("make").innerHTML = `
               ${sorted.map((item) => {
                 return `
-<h3 class="list"> ${item.Bidder.username} : <a class="bid">Price : ${item.bid_amount} $</a> </h3>
+<h3 class="list2"> ${item.Bidder.username} <a class="msg">Price : ${item.bid_amount} $</a> </h3>
 `
             }).join('')}
                 ` : document.getElementById("make").innerHTML = `
                 <h3 class="list"> <a class="bid"> ! No Bids </a> </h3>
                 `;
 
+        const scrollingElementBid = (document.getElementById("make"));
+        scrollingElementBid.scrollHeight = scrollingElementBid.scrollTop;
+
+
         bidding.Bidding.length ? document.getElementById('special').innerHTML = `
         Highest Bid : <span> ${filterData.bid_amount} $ </span>
         ` : `No One Bid <span> 0 $ </span>`;
-
 
     });
 
@@ -409,18 +539,43 @@
                 document.getElementById("make").innerHTML = `
                 ${res.data.Bidding.length ? `${res.data.Bidding.sort((a, b) => { return a.bid_amount > b.bid_amount ? -1 : 1 }).map((item) => {
                     return `
-                    <h3 class="list"> ${item.Bidder.username} : <a class="bid">Price : ${item.bid_amount} $</a> </h3>
+                    <h3 class="list2"> ${item.Bidder.username} <a class="msg">Price : ${item.bid_amount} $</a> </h3>
                     `
                 }).join('')}` : ` <h3 class="list"> <a class="bid"> ! No Bids </a> </h3>`}
-                `
+                `;
+
+                const scrollingElementBid = (document.getElementById("make"));
+                scrollingElementBid.scrollHeight = scrollingElementBid.scrollTop;
+
                 var date = Date.now();
                 setInterval(() => {
                     date = Date.now();
                     let minutes = Math.floor((new Date(res.data.ended_at).getTime() - date) / 60000);
                     let seconds = Math.floor(((new Date(res.data.ended_at).getTime() - date) % 60000) / 1000);
                     if ((new Date(res.data.ended_at).getTime() - date) <= 0) {
-                        alert('Auction Closed')
-                        window.location.href = "/welcome"
+                        return fetch('create-pdf', {
+                            method: 'POST',
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                id: bidId
+                            })
+                        }).then((res) => {
+                            if (res.status === 200) {
+                                return res.json().then((res) => {
+                                    alert(res.message);
+                                    return window.location.href = '/welcome'
+                                })
+                            } else {
+                                return res.json().then((res) => {
+                                    alert(res.message)
+                                }).catch((err) => {
+                                    alert(err.message)
+                                })
+                            }
+                        })
                     }
                     document.getElementById("minutes").innerHTML = `
                     Minutes Left :  ${minutes < 5 ? `<span style="color: red;"> ${minutes} : ${seconds < 10 ? `0${seconds}` : seconds} </span>` : `<span> ${minutes} : ${seconds < 10 ? `0${seconds}` : seconds} </span>`}
@@ -450,6 +605,19 @@
 
                     </div>
                 `
+
+                document.getElementById("message").innerHTML = `
+                ${res.data.Chat.length ? `${res.data.Chat.sort((a, b) => { return a.createdAt > b.createdAt ? 1 : -1 }).map((item) => {
+                    return `
+                    <h3 class="list2"> ${item.sender.username} : <a class="msg"> ${item.text} </a> </h3>
+                    `
+                }).join('')}` : ` <h3 class="list"> <a class="bid"> ! No Messages </a> </h3>`}
+                `;
+
+                const scrollingElement = (document.getElementById("message"));
+                scrollingElement.scrollTop = scrollingElement.scrollHeight;
+
+
             })
         } else {
             return res.json().then((res) => {
@@ -476,6 +644,50 @@
             body: JSON.stringify({
                 id: bidId,
                 bid: bid
+            })
+        }).then((res) => {
+            if (res.status === 200) {
+                return res.json().then((res) => {
+                    fetch('/get-auction-item').then((res) => {
+                        if (res.status === 200) {
+                            return res.json().then((res) => {
+                                socket.emit('bid-message', res.data);
+                            })
+                        } else {
+                            return res.json().then((res) => {
+                                alert(res.message)
+                            }).catch((err) => {
+                                alert(err.message)
+                            })
+                        }
+                    })
+                })
+            } else {
+                return res.json().then((res) => {
+                    alert(res.message);
+                    socket.emit('user-error', res.message);
+
+                }).catch((err) => {
+                    alert(err.message)
+                })
+            }
+        })
+    }
+
+
+    const send = (e) => {
+        e.preventDefault();
+        let text = document.getElementById("chat").value;
+        document.getElementById("chat").value = null;
+        fetch('send-message', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                id: bidId,
+                text: text
             })
         }).then((res) => {
             if (res.status === 200) {

@@ -124,6 +124,7 @@
 </body>
 <script>
 
+    localStorage.removeItem('auction');
     const socket = io('http://localhost:1111');
     socket.on('join-auction', data => {
         alert(data);
