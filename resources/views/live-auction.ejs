@@ -416,6 +416,8 @@
         }
     </style>
 </head>
+git commit -m "more changes done"
+git push origin master
 
 <body>
     <a onclick="leave(event)"> Leave </a>
@@ -472,7 +474,8 @@
     });
 
     socket.on('auction-results', data => {
-        localStorage.setItem('auction', data);
+        const auc = JSON.stringify(data);
+        localStorage.setItem('auction', auc);
         alert(`auction Closed Click to see Auction Results`);
         return window.location.href = "/results"
     });
@@ -546,27 +549,23 @@
 
                 const scrollingElementBid = (document.getElementById("make"));
                 scrollingElementBid.scrollHeight = scrollingElementBid.scrollTop;
-
                 var date = Date.now();
-                setInterval(() => {
+                const clear = setInterval(() => {
                     date = Date.now();
                     let minutes = Math.floor((new Date(res.data.ended_at).getTime() - date) / 60000);
                     let seconds = Math.floor(((new Date(res.data.ended_at).getTime() - date) % 60000) / 1000);
                     if ((new Date(res.data.ended_at).getTime() - date) <= 0) {
-                        return fetch('create-pdf', {
-                            method: 'POST',
+                        clearInterval(clear);
+                        return fetch(`get-single-auction-item?id=${bidId}`, {
+                            method: 'GET',
                             headers: {
                                 'Accept': 'application/json',
                                 'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify({
-                                id: bidId
-                            })
+                            }
                         }).then((res) => {
                             if (res.status === 200) {
                                 return res.json().then((res) => {
-                                    alert(res.message);
-                                    return window.location.href = '/welcome'
+                                    socket.emit('auction-end', res.data);
                                 })
                             } else {
                                 return res.json().then((res) => {
@@ -580,7 +579,7 @@
                     document.getElementById("minutes").innerHTML = `
                     Minutes Left :  ${minutes < 5 ? `<span style="color: red;"> ${minutes} : ${seconds < 10 ? `0${seconds}` : seconds} </span>` : `<span> ${minutes} : ${seconds < 10 ? `0${seconds}` : seconds} </span>`}
                     `
-                }, 1000)
+                }, 1000);
                 document.getElementById('main').innerHTML = `
                <div class="innermain"> 
                 <img src=http://localhost:9000/Images/${res.data.Item.image}> </img>
