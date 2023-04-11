@@ -2,6 +2,8 @@ const express = require("express");
 const router = express.Router();
 const acontroller = controller("Api/AuctionController");
 const loginAuth = middleware("loginAuth");
+const { User, Bid } = model("");
+
 
 
 

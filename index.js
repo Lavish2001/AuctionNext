@@ -1,6 +1,7 @@
 // index.js
 require("./bin/kernel");
 let serverless = require("serverless-http");
+const { I18n } = require('i18n');
 let express = require("express");
 let path = require("path");
 let logger = require("morgan");
@@ -12,7 +13,30 @@ let auctionRoutes = require("./routes/AuctionApi");
 let cors = require("cors");
 const { sequelize } = require("./app/Models/index");
 let app = express();
-const dir = (__dirname + '/Public/Items');
+
+const dir = (__dirname + '/Public/Items')
+const i18n = new I18n({
+  locales: ['english', 'hindi'],
+  directory: path.join(__dirname, 'locals'),
+  defaultLocale: 'hindi'
+});
+
+app.use(i18n.init);
+
+app.get('/test', async (req, res) => {
+  res.json({ login: res.__('LOGIN'), signup: res.__('SIGNUP') })
+});
+
+
+// const translate = require('translate-google');
+
+// translate('भेजना चाहते हैं हिंदी में मैसेज लेकिन नहीं आती टाइपिंग? इन आसान Tips से मोबाइल से भेजें हिंदी में टेक्स्ट मैसेज', { to: 'en' }).then(res => {
+//   console.log(res)
+// }).catch(err => {
+//   console.error(err)
+// })
+
+
 
 
 // sequelize.sync();
