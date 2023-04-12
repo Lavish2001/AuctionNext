@@ -51,6 +51,14 @@ router.get('/change_password', async (req, res) => {
 
 
 
+// CHANGE LANGUAGE //
+
+router.get('/change_language', async (req, res) => {
+  return res.render('change-language')
+});
+
+
+
 
 /****************************************************************************************************************************************************************/
 

@@ -4,6 +4,7 @@ const { signupSchema, loginSchema, changePasswordSchema } = validator("UserValid
 const { HashPassword, passwordCheck, assignToken, options, compare } = helper("Helper");
 const { Op } = require("sequelize");
 
+
 module.exports = class UserController {
 
 
@@ -174,7 +175,6 @@ module.exports = class UserController {
   // SINGLE USER DETAILS //
 
   async details(req, res) {
-
     try {
       const detail = await User.findOne({ where: { id: req.user.id }, attributes: { exclude: ['createdAt', 'updatedAt', 'email', 'password'] } });
       return res.status(200).json({ 'status': 'success', 'data': detail })

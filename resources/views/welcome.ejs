@@ -161,14 +161,15 @@
 
 <body>
     <div class="top-div">
-        <a href="/create_auction"> Create Auction </a>
-        <a href="/create_auction_item"> Add Auction Item </a>
-        <a onclick="join(event)"> Join Auction </a>
-        <a href="/change_password"> Change Password </a>
-        <a onclick="clearData(event)"> Log Out </a>
+        <a id="create" href="/create_auction"> </a>
+        <a id="add" href="/create_auction_item"> </a>
+        <a id="join" onclick="join(event)"> </a>
+        <a id="change-password" href="/change_password"> </a>
+        <a id="change-language" href="/change_language"> </a>
+        <a id="logout" onclick="clearData(event)"> </a>
     </div>
-    <h1>
-        Welcome, This is a Live Auction Website.
+    <h1 id="message">
+
     </h1>
     <div id="main">
 
@@ -177,10 +178,103 @@
 
 <script>
 
+    const res = fetch('/details', {
+        method: 'GET',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        }
+    }).then((res) => {
+        if (res.status === 200) {
+            return (res.json()).then((res) => {
+                let data = JSON.stringify(res.data);
+                localStorage.setItem("user", data);
+            })
+        } else {
+            return res.json().then((res) => {
+                alert(res.message)
+            }).catch((err) => {
+                alert(err)
+            })
+        }
+    })
+
+    let login = {
+        create: 'Create Auction',
+        add_item: 'Add Auction Item',
+        join: 'Join Auction',
+        password: 'Change Password',
+        logout: 'Log Out',
+        language: 'Change Language',
+        item_name: 'Item Name',
+        item_id: 'Item Id',
+        description: 'Description',
+        base_price: 'Base Price',
+        image: 'Item Image',
+        welcome_message: ' Welcome, This is a Live Auction Website.'
+    }
+
+    let loginHindi = {
+        create: 'नीलामी बनाएँ',
+        add_item: 'नीलामी आइटम जोड़ें',
+        join: 'नीलामी में शामिल हों',
+        password: 'पासवर्ड बदलें',
+        logout: 'लॉग आउट',
+        language: 'भाषा बदलें',
+        item_name: 'आइटम नाम',
+        item_id: 'सामान आईडी',
+        description: 'विवरण',
+        base_price: 'आधार मूल्य',
+        image: 'आइटम छवि',
+        welcome_message: 'स्वागत है, यह लाइव नीलामी वेबसाइट है।'
+    };
+
+
+    let loginArabic = {
+        create: 'إنشاء مزاد',
+        add_item: 'أضف مزاد علني',
+        join: 'الانضمام إلى المزاد',
+        password: 'تغيير كلمة المرور',
+        logout: 'تسجيل خروج',
+        language: 'تغيير اللغة',
+        welcome_message: 'مرحبًا ، هذا موقع إلكتروني مباشر للمزاد. '
+    };
+
+
+    window.onload = function () {
+        let language = localStorage.getItem('language');
+        // console.log(language == 'हिंदी')
+        if (language == 'हिंदी') {
+            document.getElementById('create').innerHTML = loginHindi.create;
+            document.getElementById('add').innerHTML = loginHindi.add_item;
+            document.getElementById('join').innerHTML = loginHindi.join;
+            document.getElementById('change-password').innerHTML = loginHindi.password;
+            document.getElementById('logout').innerHTML = loginHindi.logout;
+            document.getElementById('change-language').innerHTML = loginHindi.language;
+            document.getElementById('message').innerHTML = loginHindi.welcome_message;
+        }
+        else if (language == 'عربي') {
+            document.getElementById('create').innerHTML = loginArabic.create;
+            document.getElementById('add').innerHTML = loginArabic.add_item;
+            document.getElementById('join').innerHTML = loginArabic.join;
+            document.getElementById('change-password').innerHTML = loginArabic.password;
+            document.getElementById('logout').innerHTML = loginArabic.logout;
+            document.getElementById('change-language').innerHTML = loginArabic.language;
+            document.getElementById('message').innerHTML = loginArabic.welcome_message;
+        }
+        else {
+            document.getElementById('create').innerHTML = login.create;
+            document.getElementById('add').innerHTML = login.add_item;
+            document.getElementById('join').innerHTML = login.join;
+            document.getElementById('change-password').innerHTML = login.password;
+            document.getElementById('logout').innerHTML = login.logout;
+            document.getElementById('change-language').innerHTML = login.language;
+            document.getElementById('message').innerHTML = login.welcome_message;
+        }
+    };
+
 
     localStorage.removeItem('auction');
-
-    fetch('')
 
     const socket = io('http://localhost:1111');
     const join = (e) => {
@@ -217,11 +311,11 @@
                     <table id="tablee">
         <thead>
             <tr>
-                <th>Item Name</th>
-                <th>Item Id</th>
-                <th>Description</th>
-                <th>Base Price</th>
-                <th>Item Image</th>
+                <th id="item-name">Item Name</th>
+                <th id="item-id">Item Id</th>
+                <th id="item-description">Description</th>
+                <th id="item-base">Base Price</th>
+                <th id="item-image">Item Image</th>
             </tr>
         </thead>
         <tbody id="table_body">
@@ -274,7 +368,7 @@
         }).then((res) => {
             if (res.status === 200) {
                 return (res.json()).then((res) => {
-                    localStorage.clear();
+                    localStorage.removeItem('pageNumber');
                     window.location.href = '/'
                 })
             } else {

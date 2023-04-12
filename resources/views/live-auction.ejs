@@ -418,12 +418,12 @@
 </head>
 
 <body>
-    <a onclick="leave(event)"> Leave </a>
+    <a id="leave" onclick="leave(event)"> </a>
     <div class="top-div">
 
     </div>
-    <h1>
-        Welcome, In Live Auction.
+    <h1 id="welcome">
+
     </h1>
     <div class="double">
         <div id="main">
@@ -450,6 +450,38 @@
 </body>
 
 <script>
+    const user = JSON.parse(localStorage.getItem('user'));
+
+    let login = {
+        leave: 'Leave',
+        welcome: 'Welcome, In Live Auction.'
+    }
+
+    let loginHindi = {
+        leave: 'छोड़ना',
+        welcome: 'लाइव नीलामी में आपका स्वागत है !'
+    };
+
+    let loginArabic = {
+        leave: 'يترك',
+        welcome: 'مرحبًا بكم في المزاد العلني'
+    };
+
+    window.onload = function () {
+        let language = localStorage.getItem('language');
+        if (language == 'हिंदी') {
+            document.getElementById('leave').innerHTML = loginHindi.leave;
+            document.getElementById('welcome').innerHTML = loginHindi.welcome;
+        }
+        else if (language == 'عربي') {
+            document.getElementById('leave').innerHTML = loginArabic.leave;
+            document.getElementById('welcome').innerHTML = loginArabic.welcome;
+        }
+        else {
+            document.getElementById('leave').innerHTML = login.leave;
+            document.getElementById('welcome').innerHTML = login.welcome;
+        }
+    };
 
     const socket = io('http://localhost:1111');
 
@@ -488,7 +520,7 @@
         document.getElementById("message").innerHTML = `
                 ${bidding.Chat.length ? `${bidding.Chat.sort((a, b) => { return a.createdAt > b.createdAt ? 1 : -1 }).map((item) => {
             return `
-                    <h3 class="list2"> ${item.sender.username} : <a class="msg"> ${item.text} </a> </h3>
+                    <h3 class="list2"> ${item.sender.id == user.id ? `You` : item.sender.username} : <a class="msg"> ${item.text} </a> </h3>
                     `
         }).join('')}` : ` <h3 class="list"> <a class="bid"> ! No Messages </a> </h3>`}
                 `;
@@ -500,7 +532,7 @@
             return (pre.bid_amount > curr.bid_amount) ? pre : curr
         });
         bidding.Bidding.length ? document.getElementById('makebid2').innerHTML = `
-        <h3> Highest Bid : ${filterData.Bidder.username} <span class="span"> Price : ${filterData.bid_amount} $ </span> </h3>
+        <h3> Highest Bid : ${filterData.Bidder.id == user.id ? `You` : filterData.Bidder.username} <span class="span"> Price : ${filterData.bid_amount} $ </span> </h3>
         ` : `No One Bid <span class="span"> Price : 0 $ </span>`;
         const sorted = bidding.Bidding.sort((a, b) => {
             return (a.bid_amount > b.bid_amount) ? -1 : 1;
@@ -597,7 +629,7 @@
                     <div>
 
                         <div id="makebid2" class="makebid2">
-                    <h3> Highest Bid : ${res.data.Bidding.length ? `${filterData.Bidder.username} <span class="span"> Price : ${filterData.bid_amount} $ </span>` : `No One Bid <span class="span"> Price : 0 $ </span>`} </h3>
+                    <h3> Highest Bid : ${res.data.Bidding.length ? `${filterData.Bidder.id == user.id ? `You` : filterData.Bidder.username} <span class="span"> Price : ${filterData.bid_amount} $ </span>` : `No One Bid <span class="span"> Price : 0 $ </span>`} </h3>
                     <div>
 
                     </div>
@@ -606,7 +638,7 @@
                 document.getElementById("message").innerHTML = `
                 ${res.data.Chat.length ? `${res.data.Chat.sort((a, b) => { return a.createdAt > b.createdAt ? 1 : -1 }).map((item) => {
                     return `
-                    <h3 class="list2"> ${item.sender.username} : <a class="msg"> ${item.text} </a> </h3>
+                    <h3 class="list2"> ${item.sender.id == user.id ? `You` : item.sender.username} : <a class="msg"> ${item.text} </a> </h3>
                     `
                 }).join('')}` : ` <h3 class="list"> <a class="bid"> ! No Messages </a> </h3>`}
                 `;

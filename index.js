@@ -14,7 +14,7 @@ let cors = require("cors");
 const { sequelize } = require("./app/Models/index");
 let app = express();
 
-const dir = (__dirname + '/Public/Items')
+const dir = (__dirname + '/Public/Items');
 const i18n = new I18n({
   locales: ['english', 'hindi'],
   directory: path.join(__dirname, 'locals'),

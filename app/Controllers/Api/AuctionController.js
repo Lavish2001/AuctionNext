@@ -8,8 +8,6 @@ const CronJob = require('cron').CronJob;
 const pdfSavePath = path.join(__dirname, '../../../Public/Pdf');
 const pdfImagePath = path.join(__dirname, '../../../Public/Items');
 
-const translate = require('translate-google');
-
 
 var job = new CronJob(
     '* * * * * *',
@@ -57,7 +55,7 @@ var job = new CronJob(
 
             doc.fontSize(10).text(`Item Name: ${auction.Item.item_name}`, { align: 'center' }).moveDown();
             doc.fontSize(10).text(`Description: ${auction.Item.description}`, { align: 'center' }).moveDown();
-            doc.fontSize(10).text(`Base Price: ${auction.Item.base_price}`, { align: 'center' }).moveDown();
+            doc.fontSize(10).text(`Base Price: ${auction.Item.base_price} $`, { align: 'center' }).moveDown();
             doc.fontSize(10).text(`Highest Bid: ${auction.Bidding.length ? auction.Bidding[0].bid_amount : 0} $`, { align: 'center' }).moveDown();
             doc.fontSize(10).text(`Sold To: ${auction.Bidding.length ? auction.Bidding[0].Bidder.username : `Unsold`}`, { align: 'center' }).moveDown();
             doc.fontSize(10).text(`Started At: ${new Date(auction.started_at).toLocaleTimeString([], { hour12: true, hour: 'numeric', minute: 'numeric' })}`, { align: 'center' }).moveDown();
@@ -194,23 +192,9 @@ module.exports = class AuctionController {
                 ]
             });
             if (auction_item) {
-                const data = await Item.findOne({ where: { item_id: auction_item.item_id } });
-                for (let i = 0; i < auction_item.Chat.length; i++) {
-                    await translate(auction_item.Chat[i].text, { to: 'hi' }).then(res => {
-                        auction_item.Chat[i].text = res;
-                    }).catch(err => {
-                        console.error(err)
-                    })
-                }
                 return res.status(200).json({ 'status': 'success', 'data': auction_item })
             } else {
-                let msg;
-                await translate('No Live Auction available right now.', { to: 'hi' }).then(res => {
-                    msg = res;
-                }).catch(err => {
-                    console.error(err)
-                })
-                return res.status(400).json({ 'status': 'failed', 'message': msg })
+                return res.status(400).json({ 'status': 'failed', 'message': 'No Live Auction available right now.' })
             }
         } catch (err) {
             return res.status(500).json({ 'status': 'failed', 'message': err.message })

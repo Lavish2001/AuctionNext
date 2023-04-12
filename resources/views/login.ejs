@@ -100,25 +100,75 @@
 <body>
 
     <div class="top-div">
-        <a href="/">Back</a>
+        <a id="back" href="/"></a>
     </div>
     <div>
         <form id="form-data" onsubmit="loguser(event)">
             <div class="cntr_btn">
-                <h2>LOGIN...</h2>
+                <h2 id="login"></h2>
             </div>
             <label for="email">
-                <h2>E-mail :</h2>
+                <h2 id="emailtext"></h2>
             </label> <input id="email" autocomplete="username" class="inpt" type="email" />
             <label for="password">
-                <h2> Password :</h2>
+                <h2 id="passwordtext"> </h2>
             </label> <input id="password" autocomplete="current-password" class="inpt" type="password" />
             <br></br>
-            <div class="cntr_btn"> <button type="submit" class="btn_submit">SUBMIT</button> </div>
+            <div class="cntr_btn"> <button id="submit" type="submit" class="btn_submit"></button> </div>
         </form>
     </div>
 </body>
 <script>
+
+
+    let login = {
+        back: 'Back',
+        login: 'LOGIN...',
+        email: 'Email',
+        password: 'Password',
+        submit: 'SUBMIT'
+    }
+
+    let loginHindi = {
+        back: 'पीछे',
+        login: 'लॉग इन करें...',
+        email: 'ईमेल',
+        password: 'पासवर्ड',
+        submit: 'जमा करना'
+    }
+
+    let loginArabic = {
+        back: 'خلف',
+        login: 'تسجيل الدخول...',
+        email: 'بريد إلكتروني',
+        password: 'كلمة المرور',
+        submit: 'يُقدِّم'
+    }
+
+    window.onload = function () {
+        let language = localStorage.getItem('language');
+        if (language == 'हिंदी') {
+            document.getElementById('back').innerHTML = loginHindi.back;
+            document.getElementById('login').innerHTML = loginHindi.login;
+            document.getElementById('emailtext').innerHTML = loginHindi.email;
+            document.getElementById('passwordtext').innerHTML = loginHindi.password;
+            document.getElementById('submit').innerHTML = loginHindi.submit;
+        }
+        else if (language == 'عربي') {
+            document.getElementById('back').innerHTML = loginArabic.back;
+            document.getElementById('login').innerHTML = loginArabic.login;
+            document.getElementById('emailtext').innerHTML = loginArabic.email;
+            document.getElementById('passwordtext').innerHTML = loginArabic.password;
+            document.getElementById('submit').innerHTML = loginArabic.submit;
+        }
+        else {
+            document.getElementById('back').innerHTML = login.back;
+            document.getElementById('login').innerHTML = login.login;
+            document.getElementById('emailtext').innerHTML = login.email;
+            document.getElementById('passwordtext').innerHTML = login.password;
+            document.getElementById('submit').innerHTML = login.submit;
+        }
+    };
 
     const loguser = (e) => {
         e.preventDefault();

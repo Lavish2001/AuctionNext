@@ -97,44 +97,114 @@
         transition: 0.4s;
     }
 </style>
+
+<body>
+    <div class="top-div">
+        <a id="home" href="/welcome"> </a>
+    </div>
+    <div>
+        <form class="form-data" action="/create-item" method="post" enctype="multipart/form-data">
+            <div class="cntr_btn">
+                <h2 id="add"> </h2>
+            </div>
+            <label for="item_name">
+                <h2 id="nametext"> </h2>
+            </label> <input class="inpt" name="item_name" id="item_name" type="text" />
+            <label for="description">
+                <h2 id="descriptiontext"> </h2>
+            </label> <input class="inpt" name="description" id="description" type="text" />
+            <label for="item_id">
+                <h2 id="idtext"> </h2>
+            </label> <input class="inpt" name="item_id" id="item_id" type="text" />
+            <label>
+                <h2 id="imagetext"> </h2>
+            </label> <input id="file" class="inpt" name="image" type="file" />
+            <label for="start_price">
+                <h2 id="start"> </h2>
+            </label> <input class="inpt" name="start_price" id="start_price" type="number" />
+            <br></br>
+            <div class="cntr_btn"> <button id="submit" type="submit" class="btn_submit"> </button> </div>
+        </form>
+    </div>
+</body>
+
 <script>
+
+    let login = {
+        home: 'Home',
+        add: 'ADD AUCTION ITEM...',
+        item_name: 'Item Name',
+        description: 'Description',
+        item_id: 'Item Id',
+        item_image: 'Item Image',
+        start_price: 'Start Price',
+        submit: 'SUBMIT'
+    }
+
+    let loginHindi = {
+        home: 'घर',
+        add: 'नीलामी आइटम जोड़ें...',
+        item_name: 'आइटम नाम',
+        description: 'विवरण',
+        item_id: 'सामान आईडी',
+        item_image: 'आइटम छवि',
+        start_price: 'प्रारंभ मूल्य',
+        submit: 'जमा करना'
+    };
+
+    let loginArabic = {
+        home: 'بيت',
+        add: 'إضافة عنصر المزاد...',
+        item_name: 'اسم العنصر',
+        description: 'وصف',
+        item_id: 'معرف العنصر',
+        item_image: 'صورة العنصر',
+        start_price: 'पالسعر المبدئي',
+        submit: 'يُقدِّم',
+        placeholder: 'لم تقم باختيار ملف'
+    };
+
+    window.onload = function () {
+        let language = localStorage.getItem('language');
+        if (language == 'हिंदी') {
+            document.getElementById('home').innerHTML = loginHindi.home;
+            document.getElementById('add').innerHTML = loginHindi.add;
+            document.getElementById('nametext').innerHTML = loginHindi.item_name;
+            document.getElementById('descriptiontext').innerHTML = loginHindi.description;
+            document.getElementById('idtext').innerHTML = loginHindi.item_id;
+            document.getElementById('imagetext').innerHTML = loginHindi.item_image;
+            document.getElementById('start').innerHTML = loginHindi.start_price;
+            document.getElementById('submit').innerHTML = loginHindi.submit;
+        }
+        else if (language == 'عربي') {
+            document.getElementById('home').innerHTML = loginArabic.home;
+            document.getElementById('add').innerHTML = loginArabic.add;
+            document.getElementById('nametext').innerHTML = loginArabic.item_name;
+            document.getElementById('descriptiontext').innerHTML = loginArabic.description;
+            document.getElementById('idtext').innerHTML = loginArabic.item_id;
+            document.getElementById('imagetext').innerHTML = loginArabic.item_image;
+            document.getElementById('start').innerHTML = loginArabic.start_price;
+            document.getElementById('submit').innerHTML = loginArabic.submit;
+        }
+        else {
+            document.getElementById('home').innerHTML = login.home;
+            document.getElementById('add').innerHTML = login.add;
+            document.getElementById('nametext').innerHTML = login.item_name;
+            document.getElementById('descriptiontext').innerHTML = login.description;
+            document.getElementById('idtext').innerHTML = login.item_id;
+            document.getElementById('imagetext').innerHTML = login.item_image;
+            document.getElementById('start').innerHTML = login.start_price;
+            document.getElementById('submit').innerHTML = login.submit;
+        }
+    };
+
     localStorage.removeItem('auction');
     const socket = io('http://localhost:1111');
     socket.on('join-auction', data => {
         alert(data);
         window.location.href = "/live_auction"
-    })
+    });
 </script>
-
-<body>
-    <div class="top-div">
-        <a href="/welcome"> Home </a>
-    </div>
-    <div>
-        <form class="form-data" action="/create-item" method="post" enctype="multipart/form-data">
-            <div class="cntr_btn">
-                <h2>ADD AUCTION ITEM...</h2>
-            </div>
-            <label for="item_name">
-                <h2>Item Name :</h2>
-            </label> <input class="inpt" name="item_name" id="item_name" type="text" />
-            <label for="description">
-                <h2>Description :</h2>
-            </label> <input class="inpt" name="description" id="description" type="text" />
-            <label for="item_id">
-                <h2>Item Id :</h2>
-            </label> <input class="inpt" name="item_id" id="item_id" type="text" />
-            <label>
-                <h2>Item Image :</h2>
-            </label> <input class="inpt" name="image" type="file" />
-            <label for="start_price">
-                <h2>Start Price :</h2>
-            </label> <input class="inpt" name="start_price" id="start_price" type="number" />
-            <br></br>
-            <div class="cntr_btn"> <button type="submit" class="btn_submit">SUBMIT</button> </div>
-        </form>
-    </div>
-</body>
 
 
 </html>

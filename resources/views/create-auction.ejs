@@ -107,22 +107,65 @@
 <body>
 
     <div class="top-div">
-        <a href="/welcome">Back</a>
+        <a id="back" href="/welcome"></a>
     </div>
     <div>
         <form id="form-data" onsubmit="createAuction(event)">
             <div class="cntr_btn">
-                <h2>Create Auction ...</h2>
+                <h2 id="create"> </h2>
             </div>
             <label for="item_id">
-                <h2> Select Item :</h2>
+                <h2 id="select"> Select Item :</h2>
             </label> <select id="item_id" class="inpt"> </select>
             <br></br>
-            <div class="cntr_btn"> <button type="submit" class="btn_submit">SUBMIT</button> </div>
+            <div class="cntr_btn"> <button id="submit" type="submit" class="btn_submit">SUBMIT</button> </div>
         </form>
     </div>
 </body>
 <script>
+
+    let login = {
+        back: 'Back',
+        create: 'CREATE AUCTION...',
+        select: 'Select Item',
+        submit: 'SUBMIT'
+    }
+
+    let loginHindi = {
+        back: 'पीछे',
+        create: 'नीलामी बनाएँ...',
+        select: 'वस्तु चुनें',
+        submit: 'जमा करना'
+    };
+
+    let loginArabic = {
+        back: 'خلف',
+        create: 'إنشاء مزاد...',
+        select: 'حدد البند',
+        submit: 'يُقدِّم'
+    };
+
+    window.onload = function () {
+        let language = localStorage.getItem('language');
+        if (language == 'हिंदी') {
+            document.getElementById('back').innerHTML = loginHindi.back;
+            document.getElementById('create').innerHTML = loginHindi.create;
+            document.getElementById('select').innerHTML = loginHindi.select;
+            document.getElementById('submit').innerHTML = loginHindi.submit;
+        }
+        else if (language == 'عربي') {
+            document.getElementById('back').innerHTML = loginArabic.back;
+            document.getElementById('create').innerHTML = loginArabic.create;
+            document.getElementById('select').innerHTML = loginArabic.select;
+            document.getElementById('submit').innerHTML = loginArabic.submit;
+        }
+        else {
+            document.getElementById('back').innerHTML = login.back;
+            document.getElementById('create').innerHTML = login.create;
+            document.getElementById('select').innerHTML = login.select;
+            document.getElementById('submit').innerHTML = login.submit;
+        }
+    };
 
     localStorage.removeItem('auction');
     const socket = io('http://localhost:1111');
