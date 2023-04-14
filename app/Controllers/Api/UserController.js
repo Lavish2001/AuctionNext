@@ -1,7 +1,7 @@
 const { User } = model("");
 const { UserSession } = model("");
 const { signupSchema, loginSchema, changePasswordSchema } = validator("UserValidator");
-const { HashPassword, passwordCheck, assignToken, options, compare } = helper("Helper");
+const { HashPassword, passwordCheck, assignToken, options, compare, verify, verifyPhoneNumber } = helper("Helper");
 const { Op } = require("sequelize");
 
 
@@ -182,6 +182,41 @@ module.exports = class UserController {
       return res.status(500).json({ 'status': 'failed', 'message': err.message })
     }
   };
+
+
+
+
+  // LOGIN WITH PHONE NUMBER //
+
+  async otpVerify(req, res) {
+    try {
+      const { phone, otp } = req.body;
+      if (phone) {
+        if (phone && otp) {
+          return await verify(otp, phone, (err, result) => {
+            if (err) {
+              return res.status(400).json({ 'status': 'failed', 'message': err.message })
+            } else {
+              return res.status(200).json({ 'status': 'success', 'message': result })
+            }
+          });
+        } else {
+          await verifyPhoneNumber(phone, (err, result) => {
+            if (err) {
+              return res.status(400).json({ 'status': 'failed', 'message': err.message })
+            } else {
+              return res.status(200).json({ 'status': 'success', 'message': `OPT Send To This ${phone} Number Please Check This Number And Enter OTP.` })
+            };
+          });
+        }
+      } else {
+        return res.status(400).json({ 'status': 'ERROR' })
+      }
+    } catch (err) {
+      return res.status(500).json({ 'status': 'failed', 'message': err.message })
+    }
+  };
+
 
 
 

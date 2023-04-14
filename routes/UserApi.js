@@ -131,5 +131,23 @@ router.get('/details', loginAuth, (req, res) => {
 
 
 
+// LOGIN WITH PHONE NUMBER //
+
+router.post('/login-with-phone', loginAuth, (req, res) => {
+  return ucontroller.otpVerify(req, res);
+});
+
+
+
+
+
+router.post('/webhooks', (req, res) => {
+  console.log(req)
+});
+
+
+
+
+
 
 module.exports = router;
