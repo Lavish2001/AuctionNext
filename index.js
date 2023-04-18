@@ -1,7 +1,6 @@
 // index.js
 require("./bin/kernel");
 let serverless = require("serverless-http");
-const { I18n } = require('i18n');
 let express = require("express");
 let path = require("path");
 let logger = require("morgan");
@@ -9,6 +8,8 @@ let cookieParser = require("cookie-parser");
 let userRoutes = require("./routes/UserApi");
 let itemRoutes = require("./routes/ItemApi");
 let auctionRoutes = require("./routes/AuctionApi");
+let messageRoutes = require('./routes/MessageApi');
+const { sequelize } = require('./app/Models/index');
 
 
 // Import the library:
@@ -21,6 +22,7 @@ const dir = (__dirname + '/Public/Items');
 
 
 // sequelize.sync();
+
 
 // view engine setup
 app.set("views", path.join(__dirname, "resources/views"));
@@ -37,12 +39,18 @@ app.use(cors());
 app.use("/", userRoutes);
 app.use("/", itemRoutes);
 app.use("/", auctionRoutes);
+app.use("/", messageRoutes);
 
 
 // Images
 
 app.use('/Images', express.static(path.join(dir)));
 
+
+
+app.post('/hooks', async (req, res) => {
+  console.log(req)
+})
 
 
 // catch 404 and forward to error handler

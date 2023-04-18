@@ -4,98 +4,19 @@ const multer = require('multer');
 const Nexmo = require('nexmo');
 const { Verification } = model("");
 const path = require('path');
-const text = path.join(__dirname, '../../Public/Items/dummy.jpeg');
 const fs = require('fs');
-const data = fs.readFileSync(text);
-const jpeg = require('jpeg-js');
-const { Vonage } = require('@vonage/server-sdk');
-const { Image } = require('@vonage/messages/dist/classes/MMS/Image');
-const private_key = path.join(__dirname, '../../Public/PrivateKey/private.key');
+const private_key = fs.readFileSync(path.join(__dirname, '../../Public/PrivateKey/private.key'));
+const public_key = fs.readFileSync(path.join(__dirname, '../../Public/PublicKey/public.key'));
 
 
-// Decode the JPEG image
-const decodedImage = jpeg.decode(data);
-
-const hexString = decodedImage.data.toString('binary');
-
-// console.log(hexString)
 
 
-const { Auth } = require('@vonage/auth');
-
-
-const credentials = new Auth({
+const nexmo = new Nexmo({
     apiKey: env('NEXMO_API_KEY'),
     apiSecret: env('NEXMO_SECRET_KEY'),
     applicationId: env('NEXMO_APPICATION_ID'),
     privateKey: private_key
 });
-
-credentials.createBasicHeader();
-
-
-
-const options2 = {};
-const vonage = new Vonage(credentials.createBasicHeader(), options2);
-
-
-// Create Nexmo Instance
-
-const nexmo = new Nexmo({
-    apiKey: env('NEXMO_API_KEY'),
-    apiSecret: env('NEXMO_SECRET_KEY')
-});
-
-
-
-
-
-
-const from = 'Nexmo';
-const to = '+917087371227';
-const binaryData = '011000010110001001100011'; // binary representation of ASCII string 'abc'
-const body = Buffer.from(binaryData, "hex");
-const udh = '050003010000';
-
-
-// nexmo.message.sendBinaryMessage(from, to, body, udh, (err, res) => {
-//     if (err) {
-//         console.error(err);
-//     } else {
-//         console.log(res);
-//     }
-// });
-
-
-
-
-
-// function generateJwtToken() {
-//     const payload = {
-//         application_id: env('NEXMO_API_KEY'),
-//         iat: Math.floor(Date.now() / 1000),
-//         jti: Math.random().toString(36).substring(7),
-//         exp: Math.floor(Date.now() / 1000) + 60 * 60 // Expires in 1 hour
-//     };
-
-//     const token = jwt.sign(payload, env('NEXMO_SECRET_KEY'));
-//     return token;
-// };
-// console.log(generateJwtToken())
-
-
-
-
-
-
-
-
-vonage.messages.send({
-    image: { "url": 'https://lh3.googleusercontent.com/sD0xhnpu58NWBXgop55Up3qZkji8pU1xzXO2hfqGk4ARNKje3DrG5_ZFjS40A_HDEgM2RvVvJONf4J9JA4y2mg=s400' }, to, from
-}
-)
-    .then(resp => console.log(resp))
-    .catch(err => console.error(err));
 
 
 
@@ -103,10 +24,11 @@ vonage.messages.send({
 // Generate Message and send it to the user's phone number
 
 const sendVerificationCode = (phoneNumber) => {
-    const num = Math.floor(Math.random() * 999999);
-    const num2 = num.toString().slice(0, 4);
-    const otpCode = Number(num2);
-    const message = `Greetings.`;
+    // const num = Math.floor(Math.random() * 999999);
+    // const num2 = num.toString().slice(0, 4);
+    // const otpCode = Number(num2);
+    const msg = fs.readFileSync(text);
+    const message = 'Greetings From Nexmo...'
     const from = 'Nexmo';
 
     nexmo.message.sendSms(from, phoneNumber, message, (err, responseData) => {
@@ -243,6 +165,7 @@ const options = {
     maxAge: 604800000,
     httpOnly: true
 };
+
 
 
 

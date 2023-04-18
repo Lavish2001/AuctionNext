@@ -24,9 +24,8 @@
     "mysql2": "^2.1.0",
     "nexmo": "^2.9.1",
     "pdfkit": "^0.13.0",
-    "sequelize": "^5.22.4",
+    "sequelize": "^6.31.0",
     "serverless-http": "^2.3.2",
-    "translate": "^1.4.1",
     "translate-google": "^1.5.0",
     "twig": "^1.15.0",
     "voilab-pdf-table": "^0.5.1"
