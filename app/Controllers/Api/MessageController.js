@@ -45,6 +45,7 @@
 
 
 
+
 const { Op } = require("sequelize");
 const { Item } = model("");
 const { Message } = model("");
@@ -84,3 +85,43 @@ module.exports = class MessageController {
         }
     }
 };
+
+
+
+
+
+
+
+
+
+// const { Op } = require("sequelize");
+// const { Item } = model("");
+// const { Message } = model("");
+// const { checkAdmin, upload } = helper("Helper");
+// const { sequelize } = require('../../Models/index');
+// const { QueryTypes } = require('sequelize');
+
+
+// module.exports = class MessageController {
+//     async sendMessage(req, res) {
+//         try {
+//             const message = await Message.create({
+//                 child_id: 2,
+//                 message: 'Hello Child 2',
+//                 send_by: 1
+//             });
+
+//             if (message) {
+//                 return res.status(200).json({ status: "success", data: message });
+//             }
+//         } catch (err) {
+//             return res.status(500).json({ status: "failed", message: err.message });
+//         }
+//     }
+// };
+
+
+
+
+
+
