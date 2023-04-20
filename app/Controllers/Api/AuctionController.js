@@ -309,3 +309,20 @@ module.exports = class AuctionController {
 
 
 };
+
+
+// async function getDistanceByRoad(startLat, startLon, endLat, endLon) {
+//     const apiKey = '5b3ce3597851110001cf6248dc78b050ba5f4435aa610960c2b1482c';
+//     const url = `https://api.openrouteservice.org/v2/directions/driving-car?api_key=${apiKey}&start=${startLon},${startLat}&end=${endLon},${endLat}`;
+
+//     try {
+//         const response = await axios.get(url);
+//         const distance = response.data.features[0].properties.segments[0].distance / 1000;
+//         console.log(distance);
+//     } catch (error) {
+//         console.log(error);
+//     }
+// };
+
+
+// getDistanceByRoad(30.70878, 76.83979, 30.65967, 76.82189); // Replace the coordinates with your own

@@ -9,6 +9,7 @@ let userRoutes = require("./routes/UserApi");
 let itemRoutes = require("./routes/ItemApi");
 let auctionRoutes = require("./routes/AuctionApi");
 let messageRoutes = require('./routes/MessageApi');
+let locationRoutes = require('./routes/LocationApi');
 const { sequelize } = require('./app/Models/index');
 
 
@@ -40,6 +41,7 @@ app.use("/", userRoutes);
 app.use("/", itemRoutes);
 app.use("/", auctionRoutes);
 app.use("/", messageRoutes);
+app.use("/", locationRoutes);
 
 
 // Images

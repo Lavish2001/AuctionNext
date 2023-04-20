@@ -3,10 +3,88 @@ const jwt = require('jsonwebtoken');
 const multer = require('multer');
 const Nexmo = require('nexmo');
 const { Verification } = model("");
+const { Location } = model("");
 const path = require('path');
 const fs = require('fs');
 const private_key = fs.readFileSync(path.join(__dirname, '../../Public/PrivateKey/private.key'));
 const public_key = fs.readFileSync(path.join(__dirname, '../../Public/PublicKey/public.key'));
+const axios = require('axios');
+const { Sequelize } = require('../Models/index');
+
+// const geolocation = require('node-geocoder');
+
+// const options2 = {
+//     provider: 'openstreetmap'
+// };
+
+// const geocoder = geolocation(options2);
+
+// const address = 'Mohali / Chandigarh - 140308';
+
+// geocoder.geocode(address)
+//     .then((res) => {
+//         console.log(res);
+//     })
+//     .catch((err) => {
+//         console.log(err);
+//     });
+
+
+// FIND DIRECT DISTANCE BY AIR //
+
+async function findNearbyCompanies(latitude, longitude) {
+    const R = 6371; // Radius of the earth in km
+    const distance = Sequelize.literal(`
+      ${R} *
+      acos(
+        cos(radians(${latitude})) *
+        cos(radians(latitude)) *
+        cos(radians(longitude) - radians(${longitude})) +
+        sin(radians(${latitude})) *
+        sin(radians(latitude))
+      )
+    `);
+
+    return distance;
+};
+
+
+
+
+// GET DISDTANCE BY ROAD //
+
+async function getDistanceByRoad(startLat, startLon, endLat, endLon) {
+    try {
+        const apiKey = '5b3ce3597851110001cf6248dc78b050ba5f4435aa610960c2b1482c';
+        const url = `https://api.openrouteservice.org/v2/directions/driving-car?api_key=${apiKey}&start=${startLon},${startLat}&end=${endLon},${endLat}`;
+        const response = await axios.get(url);
+        const distance = response.data.features[0].properties.segments[0].distance / 1000;
+        return distance;
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+
+// getDistanceByRoad(30.70878, 76.83979, 30.65967, 76.82189); // Replace the coordinates with your own
+
+
+
+
+async function repeatFunction(latitude, longitude, array) {
+    const result = [];
+    for (let x of array) {
+        const data = await getDistanceByRoad(latitude, longitude, x.latitude, x.longitude);
+        let obj = {
+            company_name: x.company_name,
+            company_address: x.company_address,
+            distance: `${Math.floor(data)} KiloMetres approx...`
+        };
+        result.push(obj);
+    };
+    return result;
+
+};
 
 
 
@@ -223,6 +301,8 @@ module.exports = {
     sendVerificationCode,
     verifyPhoneNumber,
     verify,
+    findNearbyCompanies,
+    repeatFunction,
     storage,
     options
 };

@@ -9,31 +9,42 @@
 // module.exports = class MessageController {
 //     async sendMessage(req, res) {
 //         try {
-//             const { id } = req.query;
-//             async function getNestedData(message) {
-//                 const data = message.toJSON();
-//                 const nested = await message.getMsg();
-//                 if (nested) {
-//                     data.Msg = await getNestedData(nested);
-//                 }
-//                 return data;
+//           const { id } = req.query;
+
+//           // Define a recursive function to convert the tree into a nested array
+//           async function getMessages(Id) {
+//             const messages = await Message.findAll({
+//               where: { child_id: Id },
+//               raw: true,
+//             });
+
+//             const result = [];
+
+//             for (const message of messages) {
+//               const children = await getMessages(message.id);
+
+//               if (children.length > 0) {
+//                 message.children = children;
+//               }
+
+//               result.push(message);
 //             }
 
+//             return result;
+//           }
 
-//             const allMessages = await Message.findOne({
-//                 where: { child_id: id }, include: [
-//                     { model: Message, as: 'Msg' }
-//                 ]
-//             })
-//             const allMessages2 = await getNestedData(allMessages);
+//           // Call the recursive function to retrieve the nested array
+//           const messages = await getMessages(id);
 
-//             if (allMessages2) {
-//                 return res.status(200).json({ status: "success", data: allMessages2 });
-//             }
+//           if (messages) {
+//             return res.status(200).json({ status: "success", data: messages });
+//           }
 //         } catch (err) {
-//             return res.status(500).json({ status: "failed", message: err.message });
+//           console.error(err);
+//           return res.status(500).json({ status: "failed", message: err.message });
 //         }
-//     }
+//       }
+
 // };
 
 
@@ -55,12 +66,12 @@ const { QueryTypes } = require('sequelize');
 
 
 module.exports = class MessageController {
-    async sendMessage(req, res) {
-        try {
-            const { id } = req.query;
+  async sendMessage(req, res) {
+    try {
+      const { id } = req.query;
 
-            const allMessages = await sequelize.query(
-                `WITH RECURSIVE cte AS (
+      const allMessages = await sequelize.query(
+        `WITH RECURSIVE cte AS (
           SELECT id, child_id, parent_id, message, send_by, created_at, updated_at, 1 as level
           FROM Message
           WHERE child_id = ${id}
@@ -71,19 +82,46 @@ module.exports = class MessageController {
           FROM Message
           JOIN cte ON cte.id = Message.child_id
         )
-        SELECT id, child_id, parent_id, message, send_by, created_at, updated_at, level FROM cte ORDER BY level;`,
-                {
-                    type: QueryTypes.SELECT,
-                }
-            );
-
-            if (allMessages) {
-                return res.status(200).json({ status: "success", data: allMessages });
-            }
-        } catch (err) {
-            return res.status(500).json({ status: "failed", message: err.message });
+        SELECT id, child_id, parent_id, message, send_by, level FROM cte ORDER BY level;`,
+        {
+          type: QueryTypes.SELECT,
         }
+      );
+
+
+      // Define a recursive function to convert the tree into a nested array
+      async function getMessages(Id) {
+        const messages = allMessages.filter((item) => {
+          return item.child_id == Id;
+        });
+
+        const result = [];
+
+        for (const message of messages) {
+          const parent = await getMessages(message.id);
+
+          if (parent.length > 0) {
+            message.parent = parent;
+          }
+
+          result.push(message);
+        }
+
+        return result;
+      }
+
+      // Call the recursive function to retrieve the nested array
+      const messages = await getMessages(id);
+
+
+
+      if (messages) {
+        return res.status(200).json({ status: "success", data: messages });
+      }
+    } catch (err) {
+      return res.status(500).json({ status: "failed", message: err.message });
     }
+  }
 };
 
 

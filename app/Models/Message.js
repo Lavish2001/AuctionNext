@@ -17,11 +17,11 @@ module.exports = (sequelize, DataTypes) => {
                 targetKey: 'send_by'
             });
 
-            // this.myAssociation = models.Message.hasMany(models.Message, {
-            //     foreignKey: "send_by",
-            //     as: 'Msg2',
-            //     sourceKey: 'parent_id'
-            // });
+            this.myAssociation = models.Message.hasMany(models.Message, {
+                foreignKey: "send_by",
+                as: 'Msg2',
+                sourceKey: 'parent_id'
+            })
         };
     };
 
