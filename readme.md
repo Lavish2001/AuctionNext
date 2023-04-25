@@ -23,7 +23,7 @@ To use the Node.js Auction Project, you can clone the repository from GitHub and
 The project can be customized and extended as needed to fit your specific requirements. You can also add additional features and integrations using the various Node.js packages and libraries available.
 
 Overall, the Node.js Auction Project provides a powerful and flexible platform for conducting auctions online.
-- Clone Nodejs-serverless-boilerplate Repository
+- Clone Nodejs-Auction_Next Project Repository
 ```bash
     git clone https://github.com/Lavish2001/AuctionNext.git
 ```
