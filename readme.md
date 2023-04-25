@@ -1,20 +1,31 @@
-# Nodejs-serverless-boilerplate😎
-A Powerful,Flexible and Scalable boilerplate for your Serverless backend.It will help you to keep Calm,you don't need to worry about building backend architecure.Just spend your time on writting your bussiness logic.
+# Nodejs-Auction-Next Project-
+
+An auction project is a software application used to conduct auctions online. It is designed to help businesses or individuals sell items or services to the highest bidder.
+
+An auction project typically includes features such as item listing, bidding, auction management, and reporting and analytics.
 
 
-It's an Open Source Boilerplate carfted by **Community Developers** for architecture Simplicity,Flexiblity and Scalablity.
+# Node.js Auction_Next Project
+The Node.js Auction Project is a web-based application built using Node.js technology. It is designed to provide a comprehensive platform for conducting auctions online.
 
-## Why Nodejs-serverless-boilerplate 🤔
+This project is built on Node.js which provides a flexible and efficient way to fetch and manage auction data. It also uses various Node.js packages and libraries to handle authentication, data storage, and other common web application tasks.
 
-- This is simple in terms of architecture.
-- This is flexible and also architecture is open to modify according to your comfort.
-- This is well organised,well optimised and well tested for scalable projects.
-- Git clone -> npm install -> project is ready to use. 
+The features of this auction project include item listing, bidding, auction management, and reporting and analytics. It also includes various user roles and permissions to manage access to auctions and content.
 
-## How to use Nodejs-serverless-boilerplate??🧐
+- Git clone -> npm install -> project is ready to use.
+
+
+
+## How to Use the Node.js Auction_Next Project??🧐
+
+To use the Node.js Auction Project, you can clone the repository from GitHub and install the necessary dependencies using npm. Then, you can run the server and start using the application in your browser.
+
+The project can be customized and extended as needed to fit your specific requirements. You can also add additional features and integrations using the various Node.js packages and libraries available.
+
+Overall, the Node.js Auction Project provides a powerful and flexible platform for conducting auctions online.
 - Clone Nodejs-serverless-boilerplate Repository
 ```bash
-    git clone https://github.com/Rohitjoshi9023/Nodejs-serverless-boilerplate.git
+    git clone https://github.com/Lavish2001/AuctionNext.git
 ```
 - Install NPM packages 
 ```bash

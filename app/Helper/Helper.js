@@ -30,7 +30,7 @@ const { Sequelize } = require('../Models/index');
 //     });
 
 
-// FIND DIRECT DISTANCE BY AIR //
+// FIND DIRECT DISTANCE BY AIR
 
 async function findNearbyCompanies(latitude, longitude) {
     const R = 6371; // Radius of the earth in km
